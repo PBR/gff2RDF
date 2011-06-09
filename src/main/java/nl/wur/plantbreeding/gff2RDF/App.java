@@ -80,6 +80,8 @@ public class App {
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error while writting: ", ex);
         }
+        System.out.println("To clean the file run : "
+                + "sed -i -e \"s/&.*;//\" genemodel.n3");
     }
 
     /**
