@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_Gene;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_GeneProtein;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_Marker;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * This class handles the conversion from the object used in this programm
@@ -176,7 +177,10 @@ public class ObjectToModel {
      * @return the Jena Model with the added information
      */
     public final Model addGeneDescriptionToModel(final String geneid,
-            final String description, final Model model) {
+            String description, final Model model) {
+        description = description.replaceAll("&#1", "");
+        description = StringEscapeUtils.unescapeHtml(description);
+        description = description.replaceAll("&", "");
         String geneuri = uri + "GENE#";
         Resource gene = model.createResource(geneuri + geneid);
         gene.addProperty(RDF.type, geneuri);
