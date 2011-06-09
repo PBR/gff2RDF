@@ -17,6 +17,8 @@ public class At_Gene {
     private String locus = "";
     /** Function of the gene. */
     private String function = "";
+    /** Gene synonym. */
+    private String synonym = "";
     /** Name of the gene. */
     private String name = "";
     /** List of GO terms associated with the gene. */
@@ -109,6 +111,14 @@ public class At_Gene {
     }
 
     /**
+     * Set the start position of the gene on the genome.
+     * @param tmpstart a String of the start position
+     */
+    public final void setStart(final String tmpstart) {
+        this.start = Integer.parseInt(tmpstart);
+    }
+
+    /**
      * Retrieve the stop position of the gene on the genome.
      * @return a int of the stop position
      */
@@ -122,6 +132,14 @@ public class At_Gene {
      */
     public final void setStop(final int tmpstop) {
         this.stop = tmpstop;
+    }
+
+    /**
+     * Set the stop position of the gene on the genome.
+     * @param tmpstop a String of the start position
+     */
+    public final void setStop(final String tmpstop) {
+        this.stop = Integer.parseInt(tmpstop);
     }
 
     /**
@@ -140,14 +158,25 @@ public class At_Gene {
         this.chromosome = tmpchromosome;
     }
 
+    /**
+     * Get the synonym gene name for this gene.
+     * @return the synonym gene name for this gene.
+     */
+    public final String getSynonym() {
+        return synonym;
+    }
 
+    /**
+     * Set a synonym name for the gene.
+     * @param tmpsynonym a String of a synonym name
+     */
+    public final void setSynonym(final String tmpsynonym) {
+        this.synonym = tmpsynonym;
+    }
 
     /*
      * Non-basic functions
      */
-
-
-
     /**
      * Add a GO ID to the list of Go terms associated with the gene
      * if the GO ID is not in the list yet.
@@ -174,6 +203,7 @@ public class At_Gene {
             stop = tmpstop;
         }
     }
+
     /**
      * Add the start and stop position of the gene on the genome.
      * Invert start and stop if stop is higher than start.
@@ -184,5 +214,25 @@ public class At_Gene {
         final int intstart = Integer.parseInt(tmpstart);
         final int intstop = Integer.parseInt(tmpstop);
         this.addPosition(intstart, intstop);
+    }
+
+    /**
+     * Output the content of the object.
+     */
+    @Override
+    public final String toString() {
+        String newline = System.getProperty("line.separator");
+        StringBuilder result = new StringBuilder();
+        result.append(this.getClass().getName()).append(" Object {").append(newline);
+        result.append("Name: ").append(this.name).append(newline);
+        result.append("Synonym: ").append(this.synonym).append(newline);
+        result.append("Function: ").append(this.function).append(newline);
+        result.append("Locus: ").append(this.locus).append(newline);
+        result.append("Chromosome: ").append(this.chromosome).append(newline);
+        result.append("Start: ").append(this.start).append(newline);
+        result.append("Stop: ").append(this.stop).append(newline);
+        result.append("}");
+
+        return result.toString();
     }
 }
