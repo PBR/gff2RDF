@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.wur.plantbreeding.gff2rdf2.Arabidopsis;
+package nl.wur.plantbreeding.gff2RDF.Arabidopsis;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import java.io.BufferedReader;
@@ -11,7 +11,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2rdf2.ObjectToModel;
+import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
 
 /**
  * This class parses the files retrieved on the TAIR FTP and which gives the

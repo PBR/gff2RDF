@@ -2,16 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.wur.plantbreeding.gff2rdf2;
+package nl.wur.plantbreeding.gff2RDF;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_Gene;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_GeneProtein;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_Marker;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_Gene;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_GeneProtein;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_Marker;
 
 /**
  * This class handles the conversion from the object used in this programm

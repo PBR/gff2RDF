@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.wur.plantbreeding.gff2rdf2.Arabidopsis;
+package nl.wur.plantbreeding.gff2RDF.Arabidopsis;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import java.io.BufferedReader;
@@ -11,22 +11,25 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2rdf2.ObjectToModel;
+import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
 
 /**
- * This class parses the Arabidopsis thaliana GO annotation.
+ * This class parses the files submitted by TAIR to the NCBI in the release
+ * TAIR10.
+ * Files have been downloaded on May 17th 2011 on the TAIR ftp and the parser
+ * is adapted to this format.
  *
- * See ftp://ftp.arabidopsis.org/Ontologies/Gene_Ontology/ATH_GO.README.txt for
- * more information.
+ * The file name is of the type:
+ *      TAIR10_GFF3_genes.gff
  *
  * As format may change, the parser may need changes for futur release.
  * @author Pierre-Yves Chibon -- py@chibon.fr
  */
-public class At_ParseGoGene {
+public class At_ParseGeneInfo {
 
     /** Logger used for outputing log information. */
     private final Logger log = Logger.getLogger(
-            At_ParseGoGene.class.getName());
+            At_ParseGeneInfo.class.getName());
 
     /**
      * This method parse the tbl files from TAIR and add the information
@@ -46,7 +49,7 @@ public class At_ParseGoGene {
      * @return a Jena model containing with its previous information the gene
      * information retrieved by this method.
      */
-    public final Model getModelFromAthGo(final String inputfilename,
+    public final Model getModelFromTbl(final String inputfilename,
             Model model) {
 
         log.log(Level.INFO, "Parsing: {0} and adding information to a model "
@@ -68,10 +71,16 @@ public class At_ParseGoGene {
             while ((strline = br.readLine()) != null) {
                 strline = strline.trim();
                 String[] content = strline.split("\t");
-                if (content.length > 1 && content[0].startsWith("AT")) {
+                if (content.length > 1 && content[2].equalsIgnoreCase("gene")) {
                     gene = new At_Gene();
-                    gene.setLocus(content[0].trim());
-                    gene.addGoTerm(content[5].trim());
+                    gene.setChromosome(content[0].trim());
+                    gene.addPosition(content[3], content[4]);
+                    String locus = content[content.length - 1].split(
+                            "ID=")[1].split(";")[0];
+                    gene.setLocus(locus);
+                    String function = content[content.length - 1].split(
+                            "Note=")[1].split(";")[0];
+                    gene.setFunction(function);
 
                     // Add gene to model
                     model = obj2m.addToModel(gene, model);
@@ -98,3 +107,4 @@ public class At_ParseGoGene {
         return model;
     }
 }
+

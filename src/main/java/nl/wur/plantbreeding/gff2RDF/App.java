@@ -1,4 +1,4 @@
-package nl.wur.plantbreeding.gff2rdf2;
+package nl.wur.plantbreeding.gff2RDF;
 
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -6,12 +6,12 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_GeneticMap;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_ParseGeneDescription;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_ParseGeneInfo;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_ParseGeneProtein;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_ParseGoGene;
-import nl.wur.plantbreeding.gff2rdf2.Arabidopsis.At_PhysicalMap;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_GeneticMap;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneDescription;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneInfo;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneProtein;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGoGene;
+import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_PhysicalMap;
 
 /**
  * Main class of the project.

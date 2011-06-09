@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package nl.wur.plantbreeding.gff2rdf2.Arabidopsis;
+package nl.wur.plantbreeding.gff2RDF.Arabidopsis;
 
 /**
  * This class represent the Arabidopsis thaliana markers.

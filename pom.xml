@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.wur.plantbreeding</groupId>
-  <artifactId>gff2rdf2</artifactId>
+  <artifactId>gff2RDF</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>gff2rdf2</name>
+  <name>gff2RDF</name>
   <url>http://maven.apache.org</url>
     <build>
         <plugins>

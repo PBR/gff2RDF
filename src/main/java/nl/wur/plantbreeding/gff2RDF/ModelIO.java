@@ -1,4 +1,4 @@
-package nl.wur.plantbreeding.gff2rdf2;
+package nl.wur.plantbreeding.gff2RDF;
 
 import com.hp.hpl.jena.iri.impl.Main;
 import com.hp.hpl.jena.rdf.model.Model;

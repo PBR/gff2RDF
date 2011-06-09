@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.wur.plantbreeding.gff2rdf2.Arabidopsis;
+package nl.wur.plantbreeding.gff2RDF.Arabidopsis;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import java.io.BufferedReader;
@@ -11,10 +11,10 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2rdf2.ObjectToModel;
+import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
 
 /**
- * This class parses the Arabidopsis thaliana Genetic Map
+ * This class parses the Arabidopsis thaliana Physical Map
  *
  * File was obtain converted in tab delimiter format using OOo Calc based on
  * this file:
@@ -23,14 +23,14 @@ import nl.wur.plantbreeding.gff2rdf2.ObjectToModel;
  * As format may change, the parser may need changes for futur release.
  * @author Pierre-Yves Chibon -- py@chibon.fr
  */
-public class At_GeneticMap {
+public class At_PhysicalMap {
 
     /** Logger used for outputing log information. */
     private final Logger log = Logger.getLogger(
-            At_GeneticMap.class.getName());
+            At_PhysicalMap.class.getName());
 
     /**
-     * This method parses the genetic map to extract the genetic position of
+     * This method parses the genetic map to extract the physical position of
      * the marker in the map and add them to the model returned.
      *
      * @param inputfilename the path to the input file the genetic map
@@ -38,7 +38,7 @@ public class At_GeneticMap {
      * @return a Jena model containing with its previous information the
      * information about the marker in the genetic map
      */
-    public final Model getModelFromGeneticMap(final String inputfilename,
+    public final Model getModelFromPhysicalMap(final String inputfilename,
             Model model) {
 
         log.log(Level.INFO, "Parsing: {0} and adding information to a model "
@@ -62,10 +62,11 @@ public class At_GeneticMap {
                 strline = strline.trim();
                 String[] content = strline.split(",");
                 if (content.length > 1 && cnt > 1) {
-                    marker = new At_Marker();
+                    marker = new At_Marker(false);
                     marker.setName(content[0].trim());
                     marker.setChromosome(content[1].trim());
-                    marker.setPosition(content[2].trim());
+                    marker.setStart(content[2].trim());
+                    marker.setStop(content[2].trim());
 
                     // Add marker to model
                     model = obj2m.addToModel(marker, model);
@@ -87,6 +88,7 @@ public class At_GeneticMap {
             log.log(Level.SEVERE, "Line: {0}", strline);
             log.log(Level.SEVERE, "Caught an exception: ", e);
         }
+
 
         return model;
     }
