@@ -7,11 +7,10 @@ package nl.wur.plantbreeding.gff2RDF;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_Gene;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_GeneProtein;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_Marker;
+import nl.wur.plantbreeding.gff2RDF.object.Gene;
+import nl.wur.plantbreeding.gff2RDF.object.Marker;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -37,7 +36,7 @@ public class ObjectToModel {
      * @param model a Jena Model
      * @return a Jena Model with the gene information
      */
-    public final Model addToModel(final At_Gene geneobj, final Model model) {
+    public final Model addToModel(final Gene geneobj, final Model model) {
         // Set the different URI that will be used
         String geneuri = uri + "GENE#";
         String scaffolduri = uri + "SCAFFOLD#";
@@ -75,7 +74,7 @@ public class ObjectToModel {
             position.addProperty(model.createProperty(positionuri + "Stop"),
                     Integer.toString(geneobj.getStop()));
             position.addProperty(model.createProperty(positionuri + "Scaffold"),
-                    geneobj.getChromosome());
+                    scaffold);
             gene.addProperty(model.createProperty(geneuri + "Position"),
                     position);
         }
@@ -129,11 +128,12 @@ public class ObjectToModel {
      * @return the given Jena Model containing the original information and the
      * information about the marker.
      */
-    public final Model addToModel(final At_Marker marker, final Model model) {
+    public final Model addToModel(final Marker marker, final Model model) {
         // Set the different URI that will be used
         String markeruri = uri + "MARKER#";
         String positionuri = uri + "POSITION#";
         String mappositionuri = uri + "MAPPOSITION#";
+        String scaffolduri = uri + "SCAFFOLD#";
 
         // Create the gene node and add the type
         Resource markerres = model.createResource(markeruri
@@ -141,6 +141,16 @@ public class ObjectToModel {
         markerres.addProperty(model.createProperty(markeruri
                         + "MarkerName"), marker.getName());
         markerres.addProperty(RDF.type, markeruri);
+
+        // Create the scaffold node, add type and name
+        Resource scaffold = model.createResource(scaffolduri
+                + marker.getChromosome());
+        scaffold.addProperty(RDF.type, scaffolduri);
+        if (marker.getChromosome() != null
+                && !marker.getChromosome().isEmpty()) {
+            scaffold.addProperty(model.createProperty(scaffolduri
+                    + "ScaffoldName"), marker.getChromosome());
+        }
 
         // Create the position node
         if (marker.getChromosome() != null
@@ -160,7 +170,7 @@ public class ObjectToModel {
                 position.addProperty(model.createProperty(positionuri + "Stop"),
                         Integer.toString(marker.getStop()));
                 position.addProperty(model.createProperty(positionuri
-                        + "Scaffold"), "Chr" + marker.getChromosome());
+                        + "Scaffold"), scaffold);
                 markerres.addProperty(model.createProperty(markeruri
                         + "Position"), position);
             }
