@@ -115,6 +115,8 @@ public class ArabidopsisAction {
         try {
             // File containing the gene description
             inputfilename = "At/TAIR10_functional_descriptions";
+            App.cleanFile(inputfilename);
+            inputfilename = inputfilename + "-cleaned";
             At_ParseGeneDescription parser = new At_ParseGeneDescription();
             model = parser.getModelFromTbl(inputfilename, model);
         } catch (IOException ex) {

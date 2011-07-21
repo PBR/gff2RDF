@@ -1,8 +1,14 @@
 package nl.wur.plantbreeding.gff2RDF;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -116,5 +122,41 @@ public class App {
                     "The folder '{0}' already exists, no need to create it.",
                     foldername);
         }
+    }
+
+    /**
+     * This method remove all illegal characters from a file.
+     *
+     * This is needed for the gene description file from Arabidopsis which
+     * contains character making the generation of the RDF impossible.
+     * @param filename the string of the name of the file to read.
+     * @throws IOException if something goes wrong while reading/writing.
+     */
+    public static void cleanFile(String filename) throws IOException {
+        System.out.println("Cleanning file: " + filename);
+        final FileInputStream fstream = new FileInputStream(filename);
+        // Get the object of DataInputStream
+        final DataInputStream in = new DataInputStream(fstream);
+        final BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        FileWriter fstreamout = new FileWriter(filename + "-cleaned");
+        BufferedWriter out = new BufferedWriter(fstreamout);
+
+        String strline = "";
+        while ((strline = br.readLine()) != null) {
+            // We need to split the line as otherwise we loos all the tabs
+            String[] words = strline.split("\t");
+            String newline = "";
+            for (String word : words) {
+                word = word.replaceAll("[^\\x20-\\x7e]", "");
+                if (newline.equals("")) {
+                    newline = word;
+                } else {
+                    newline = newline + "\t" + word;
+                }
+            }
+            out.write(newline + "\n");
+        }
+        out.close();
+        br.close();
     }
 }
