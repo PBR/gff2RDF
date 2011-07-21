@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,63 +49,57 @@ public class At_ParseGeneInfo {
      * @param model a Jena model in which the gene information will be stored
      * @return a Jena model containing with its previous information the gene
      * information retrieved by this method.
+     * @throws IOException When something goes wrong with a file.
      */
     public final Model getModelFromTbl(final String inputfilename,
-            Model model) {
+            Model model) throws IOException {
 
-        log.log(Level.INFO, "Parsing: {0} and adding information to a model "
-                + "of size " + model.size(), inputfilename);
+        System.out.println("Parsing: " + inputfilename
+                + " and adding information to a model of size " + model.size());
 
         ObjectToModel obj2m = new ObjectToModel();
 
         int cnt = 0;
         int genecnt = 0;
         String strline = "";
-        try {
-            final FileInputStream fstream = new FileInputStream(inputfilename);
-            // Get the object of DataInputStream
-            final DataInputStream in = new DataInputStream(fstream);
-            final BufferedReader br =
-                    new BufferedReader(new InputStreamReader(in));
-            At_Gene gene = null;
-            //Read File Line By Line
-            while ((strline = br.readLine()) != null) {
-                strline = strline.trim();
-                String[] content = strline.split("\t");
-                if (content.length > 1 && content[2].equalsIgnoreCase("gene")) {
-                    gene = new At_Gene();
-                    gene.setChromosome(content[0].trim());
-                    gene.addPosition(content[3], content[4]);
-                    String locus = content[content.length - 1].split(
-                            "ID=")[1].split(";")[0];
-                    gene.setLocus(locus);
-                    String function = content[content.length - 1].split(
-                            "Note=")[1].split(";")[0];
-                    gene.setFunction(function);
+        final FileInputStream fstream = new FileInputStream(inputfilename);
+        // Get the object of DataInputStream
+        final DataInputStream in = new DataInputStream(fstream);
+        final BufferedReader br =
+                new BufferedReader(new InputStreamReader(in));
+        At_Gene gene = null;
+        //Read File Line By Line
+        while ((strline = br.readLine()) != null) {
+            strline = strline.trim();
+            String[] content = strline.split("\t");
+            if (content.length > 3 && content[2].equalsIgnoreCase("gene")) {
+                gene = new At_Gene();
+                gene.setChromosome(content[0].trim());
+                gene.addPosition(content[3], content[4]);
+                String locus = content[content.length - 1].split(
+                        "ID=")[1].split(";")[0];
+                gene.setLocus(locus);
+                String function = content[content.length - 1].split(
+                        "Note=")[1].split(";")[0];
+                gene.setFunction(function);
 
-                    // Add gene to model
-                    model = obj2m.addToModel(gene, model);
-                    genecnt = genecnt + 1;
-                }
-                cnt = cnt + 1;
-            }
-            in.close();
-
-            if (gene != null) {
-                // add gene to model here
+                // Add gene to model
                 model = obj2m.addToModel(gene, model);
+                genecnt = genecnt + 1;
             }
+            cnt = cnt + 1;
+        }
+        in.close();
 
-            log.log(Level.INFO, cnt + " lines read");
-            log.log(Level.INFO, genecnt + " genes found");
-            log.log(Level.INFO, "Model has size: " + model.size());
-        } catch (Exception e) { //Catch exception if any
-            log.log(Level.SEVERE, "Line: {0}", strline);
-            log.log(Level.SEVERE, "Caught an exception: ", e);
+        if (gene != null) {
+            // add gene to model here
+            model = obj2m.addToModel(gene, model);
         }
 
+        log.log(Level.FINE, cnt + " lines read");
+        log.log(Level.FINE, genecnt + " genes found");
+        log.log(Level.FINE, "Model has size: " + model.size());
 
         return model;
     }
 }
-

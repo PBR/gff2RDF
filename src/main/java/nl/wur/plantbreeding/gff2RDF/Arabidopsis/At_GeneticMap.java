@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,56 +38,52 @@ public class At_GeneticMap {
      * @param model a Jena model in which the gene information will be stored
      * @return a Jena model containing with its previous information the
      * information about the marker in the genetic map
+     * @throws IOException When something goes wrong with a file.
      */
     public final Model getModelFromGeneticMap(final String inputfilename,
-            Model model) {
+            Model model) throws IOException {
 
-        log.log(Level.INFO, "Parsing: {0} and adding information to a model "
-                + "of size " + model.size(), inputfilename);
+        System.out.println("Parsing: " + inputfilename
+                + " and adding information to a model of size " + model.size());
 
         ObjectToModel obj2m = new ObjectToModel();
 
         int cnt = 0;
         int genecnt = 0;
         String strline = "";
-        try {
-            final FileInputStream fstream = new FileInputStream(inputfilename);
-            // Get the object of DataInputStream
-            final DataInputStream in = new DataInputStream(fstream);
-            final BufferedReader br =
-                    new BufferedReader(new InputStreamReader(in));
-            At_Marker marker = null;
-            //Read File Line By Line
-            while ((strline = br.readLine()) != null) {
-                strline = strline.replace("\"", "");
-                strline = strline.trim();
-                String[] content = strline.split(",");
-                if (content.length > 1 && cnt > 1) {
-                    marker = new At_Marker();
-                    marker.setName(content[0].trim());
-                    marker.setChromosome(content[1].trim());
-                    marker.setPosition(content[2].trim());
+        final FileInputStream fstream = new FileInputStream(inputfilename);
+        // Get the object of DataInputStream
+        final DataInputStream in = new DataInputStream(fstream);
+        final BufferedReader br =
+                new BufferedReader(new InputStreamReader(in));
+        At_Marker marker = null;
+        //Read File Line By Line
+        while ((strline = br.readLine()) != null) {
+            strline = strline.replace("\"", "");
+            strline = strline.trim();
+            String[] content = strline.split(",");
+            if (content.length > 1 && cnt > 1) {
+                marker = new At_Marker();
+                marker.setName(content[0].trim());
+                marker.setChromosome(content[1].trim());
+                marker.setPosition(content[2].trim());
 
-                    // Add marker to model
-                    model = obj2m.addToModel(marker, model);
-                    genecnt = genecnt + 1;
-                }
-                cnt = cnt + 1;
-            }
-            in.close();
-
-            if (marker != null) {
-                // add marker to model here
+                // Add marker to model
                 model = obj2m.addToModel(marker, model);
+                genecnt = genecnt + 1;
             }
-
-            log.log(Level.INFO, cnt + " lines read");
-            log.log(Level.INFO, genecnt + " markers found");
-            log.log(Level.INFO, "Model has size: " + model.size());
-        } catch (Exception e) { //Catch exception if any
-            log.log(Level.SEVERE, "Line: {0}", strline);
-            log.log(Level.SEVERE, "Caught an exception: ", e);
+            cnt = cnt + 1;
         }
+        in.close();
+
+        if (marker != null) {
+            // add marker to model here
+            model = obj2m.addToModel(marker, model);
+        }
+
+        log.log(Level.FINE, cnt + " lines read");
+        log.log(Level.FINE, genecnt + " markers found");
+        log.log(Level.FINE, "Model has size: " + model.size());
 
         return model;
     }

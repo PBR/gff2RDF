@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,42 +39,39 @@ public class At_ParseGeneProtein {
      * stored
      * @return a Jena model containing with its previous information the
      * gene/protein information retrieved by this method.
+     * @throws IOException When something goes wrong with a file.
      */
     public final Model getModelFromAGI2Uniprot(final String inputfilename,
-            Model model) {
+            Model model) throws IOException {
 
-        log.log(Level.INFO, "Parsing: {0} and adding information to a model "
-                + "of size " + model.size(), inputfilename);
+        System.out.println("Parsing: " + inputfilename
+                + " and adding information to a model of size " + model.size());
 
         ObjectToModel obj2m = new ObjectToModel();
 
         int cnt = 0;
-        try {
-            final FileInputStream fstream = new FileInputStream(inputfilename);
-            // Get the object of DataInputStream
-            final DataInputStream in = new DataInputStream(fstream);
-            final BufferedReader br =
-                    new BufferedReader(new InputStreamReader(in));
-            String strline;
-            //Read File Line By Line
-            while ((strline = br.readLine()) != null) {
-                strline = strline.trim();
-                String[] content = strline.split("\t");
-                At_GeneProtein agp = new At_GeneProtein();
-                // We keep only the content before the "."
-                String locus = content[0].trim().split("\\.")[0];
-                agp.setLocus(locus);
-                agp.setProtein(content[1].trim());
-                model = obj2m.addToModel(agp, model);
-                cnt = cnt + 1;
-            }
-            in.close();
-
-            log.log(Level.INFO, cnt + " lines read");
-            log.log(Level.INFO, "Final model has size: " + model.size());
-        } catch (Exception e) { //Catch exception if any
-            log.log(Level.SEVERE, "Caught an exception: ", e);
+        final FileInputStream fstream = new FileInputStream(inputfilename);
+        // Get the object of DataInputStream
+        final DataInputStream in = new DataInputStream(fstream);
+        final BufferedReader br =
+                new BufferedReader(new InputStreamReader(in));
+        String strline;
+        //Read File Line By Line
+        while ((strline = br.readLine()) != null) {
+            strline = strline.trim();
+            String[] content = strline.split("\t");
+            At_GeneProtein agp = new At_GeneProtein();
+            // We keep only the content before the "."
+            String locus = content[0].trim().split("\\.")[0];
+            agp.setLocus(locus);
+            agp.setProtein(content[1].trim());
+            model = obj2m.addToModel(agp, model);
+            cnt = cnt + 1;
         }
+        in.close();
+
+        log.log(Level.FINE, cnt + " lines read");
+        log.log(Level.FINE, "Final model has size: " + model.size());
 
         return model;
     }
