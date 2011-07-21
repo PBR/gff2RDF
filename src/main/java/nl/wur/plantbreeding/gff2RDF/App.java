@@ -1,9 +1,12 @@
 package nl.wur.plantbreeding.gff2RDF;
 
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_GeneticMap;
@@ -12,6 +15,8 @@ import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneInfo;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneProtein;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGoGene;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_PhysicalMap;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
 /**
  * Main class of the project.
@@ -42,46 +47,35 @@ public class App {
      */
     public static void main(final String[] args) {
 
-        String homefolder = System.getProperty("user.home").replace('\\', '/');
-        Model model = ModelFactory.createDefaultModel();
+        ClOptions options = new ClOptions();
+        CmdLineParser parser = new CmdLineParser(options);
+        parser.setUsageWidth(90);
 
-
-        // GFF file containing the gene information
-        String inputfilename = homefolder + "/Desktop/At/TAIR10_GFF3_genes.gff";
-        model = App.AtGenes(model, inputfilename);
-
-        inputfilename = homefolder
-                + "/Desktop/At/TAIR10_functional_descriptions";
-        model = App.AtGeneDescription(model, inputfilename);
-
-        // GFF file containing GO annotation for genes
-        // use release from : 05/17/2011     06:33:00 AM
-        inputfilename = homefolder + "/Desktop/At/ATH_GO_GOSLIM.txt";
-        model = App.AtGoGene(model, inputfilename);
-
-        // AGI2 Uniprot adding Gene Protein relation
-        inputfilename = homefolder + "/Desktop/At/AGI2Uniprot.20101118";
-        model = App.AtGeneProtein(model, inputfilename);
-
-        // Add physical location of the markers
-        inputfilename = homefolder + "/Desktop/At/CvixCol_Physic.csv";
-        model = App.AtPhysicalMap(model, inputfilename);
-
-        // Add genomic location of the markers
-        inputfilename = homefolder + "/Desktop/At/CvixCol_Genetic.csv";
-        model = App.AtGeneticMap(model, inputfilename);
-
-
-        LOG.log(Level.INFO, "Model final: " + model.size());
         try {
-            ModelIO mio = new ModelIO();
-            String outputfilename = homefolder + "/Desktop/At/genemodel.n3";
-            mio.printModelNtripleToFile(model, outputfilename);
-        } catch (IOException ex) {
-            LOG.log(Level.SEVERE, "Error while writting: ", ex);
+            parser.parseArgument(args);
+
+            if (options.isHelp() || args.length == 0) {
+                parser.printUsage(System.err);
+                return;
+            }
+
+            if (options.isArabidopsis()) {
+                ArabidopsisAction aa = new ArabidopsisAction();
+                aa.download(options.isForceDl());
+                aa.main(options.isDebug());
+            }
+        } catch (CmdLineException e) {
+            LOG.log(Level.SEVERE, "Error in the command line: {0}",
+                    e.getMessage());
+            System.err.println("java -jar gff2rdf2.jar [options...] arguments...");
+            parser.printUsage(System.err);
+            System.exit(1);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "An Error occured: {0}", e.getMessage());
+            e.printStackTrace(System.err);
+            System.exit(100);
+            return;
         }
-        System.out.println("To clean the file run : "
-                + "sed -i -e \"s/&.*;//\" genemodel.n3");
     }
 
     /**
@@ -92,43 +86,35 @@ public class App {
         return this.uri;
     }
 
-    private static Model AtGenes(Model model, final String inputfilename) {
-        // Arabidopsis thaliana's GENE parser
-        At_ParseGeneInfo parser = new At_ParseGeneInfo();
-        model = parser.getModelFromTbl(inputfilename, model);
-        return model;
+    public static void downaloadFile(String url, String outputfile, boolean force)
+            throws MalformedURLException, IOException {
+        System.out.println("Trying to download file: '" + outputfile
+                + "' from :\n " + url);
+        File f = new File(outputfile);
+        if (f.exists() && !force) {
+            System.out.println("  -- no need \n");
+            LOG.log(Level.FINE, "The file {0} already exists, no need to re-download it",
+                    outputfile);
+            return;
+        }
+        System.out.println();
+        URL google = new URL(url);
+        ReadableByteChannel rbc = Channels.newChannel(google.openStream());
+        FileOutputStream fos = new FileOutputStream(outputfile);
+        fos.getChannel().transferFrom(rbc, 0, 1 << 24);
     }
 
-    private static Model AtGeneDescription(Model model, String inputfilename) {
-        At_ParseGeneDescription parser = new At_ParseGeneDescription();
-        model = parser.getModelFromTbl(inputfilename, model);
-        return model;
-    }
-
-    private static Model AtGoGene(Model model, String inputfilename) {
-        At_ParseGoGene parser = new At_ParseGoGene();
-        model = parser.getModelFromAthGo(inputfilename, model);
-        return model;
-    }
-
-    private static Model AtGeneProtein(Model model, final String inputfilename) {
-        // Arabidopsis thalian's Gene/Protein Parser
-        At_ParseGeneProtein parser = new At_ParseGeneProtein();
-        model = parser.getModelFromAGI2Uniprot(inputfilename, model);
-        return model;
-    }
-
-    private static Model AtGeneticMap(Model model, final String inputfilename) {
-        // Arabidopsis thalian's Gene/Protein Parser
-        At_GeneticMap parser = new At_GeneticMap();
-        model = parser.getModelFromGeneticMap(inputfilename, model);
-        return model;
-    }
-
-    private static Model AtPhysicalMap(Model model, final String inputfilename) {
-        // Arabidopsis thalian's Gene/Protein Parser
-        At_PhysicalMap parser = new At_PhysicalMap();
-        model = parser.getModelFromPhysicalMap(inputfilename, model);
-        return model;
+    public static void makeFolder(String foldername) {
+        System.out.println(
+                "The files downloaded and generated will be stored in the folder "
+                + foldername + " created in the current directory.");
+        File f = new File(foldername);
+        if (!f.exists()) {
+            f.mkdir();
+        } else {
+            LOG.log(Level.FINE,
+                    "The folder '{0}' already exists, no need to create it.",
+                    foldername);
+        }
     }
 }
