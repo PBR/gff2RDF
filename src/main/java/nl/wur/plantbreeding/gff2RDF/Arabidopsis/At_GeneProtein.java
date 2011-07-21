@@ -5,8 +5,6 @@
 
 package nl.wur.plantbreeding.gff2RDF.Arabidopsis;
 
-import java.util.ArrayList;
-
 /**
  * This class represent the Gene/protein information retrieved from
  * the AGI2Uniprot files.
