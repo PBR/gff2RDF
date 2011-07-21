@@ -79,7 +79,7 @@ public class ModelIO {
         // now write the model in XML form to a file
         model.write(out);
         out.close();
-        log.log(Level.INFO, "Write model in RDF in: {0}", filename);
+        System.out.println("Write model in RDF in: " + filename);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ModelIO {
         // now write the model in N3 form to a file
         model.write(out, "N-TRIPLE");
         out.close();
-        log.log(Level.INFO, "Write model in N3 in: {0}", filename);
+        System.out.println("Write model in N# in: " + filename);
     }
 
     /**
