@@ -34,9 +34,13 @@ public class ClOptions {
         usage="Increase the verbosity of the output to help debugging")
     private boolean debug;
 
-    @Option(name="--force_download",
+    @Option(name="--force-download",
         usage="Force the download of the files even if there are already found on their folder.")
     private boolean forcedl;
+
+    @Option(name="--download-only",
+        usage="Performs only the download of the files")
+    private boolean dlonly;
 
     /**
      * Returns whether the help argument was set.
@@ -44,6 +48,14 @@ public class ClOptions {
      */
     public boolean isHelp(){
         return this.help;
+    }
+
+    /**
+     * Returns whether the download only argument was set.
+     * @return the boolean dlonly.
+     */
+    public boolean isDlOnly(){
+        return this.dlonly;
     }
 
     /**

@@ -68,7 +68,9 @@ public class App {
             if (options.isArabidopsis()) {
                 ArabidopsisAction aa = new ArabidopsisAction();
                 aa.download(options.isForceDl());
-                aa.main(options.isDebug());
+                if (!options.isDlOnly()){
+                    aa.main(options.isDebug());
+                }
             }
         } catch (CmdLineException e) {
             LOG.log(Level.SEVERE, "Error in the command line: {0}",
