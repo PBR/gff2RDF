@@ -18,6 +18,7 @@ import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneInfo;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneProtein;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGoGene;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_PhysicalMap;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /**
  * This is the action class which enables to download and export the genome
@@ -160,8 +161,17 @@ public class ArabidopsisAction {
         try {
             // Add physical location of the markers
             inputfilename = "At/CvixCol_Physic.csv";
+            ExcelIO.convertToCsv("At/CvixCol_MapCoord.xls", "CvixCol_Physic",
+                    "At/CvixCol_Physic.csv");
             At_PhysicalMap parser = new At_PhysicalMap();
             model = parser.getModelFromPhysicalMap(inputfilename, model);
+        } catch (InvalidFormatException ex) {
+            System.err.println();
+            LOG.log(Level.SEVERE, "Invalid Format Error in " + inputfilename
+                    + ": \"{0}\"", ex.getMessage());
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "IO Error in " + inputfilename
@@ -174,8 +184,17 @@ public class ArabidopsisAction {
         try {
             // Add genomic location of the markers
             inputfilename = "At/CvixCol_Genetic.csv";
+            ExcelIO.convertToCsv("At/CvixCol_MapCoord.xls", "CvixCol_Genetic",
+                    "At/CvixCol_Genetic.csv");
             At_GeneticMap parser = new At_GeneticMap();
             model = parser.getModelFromGeneticMap(inputfilename, model);
+        } catch (InvalidFormatException ex) {
+            System.err.println();
+            LOG.log(Level.SEVERE, "Invalid Format Error in " + inputfilename
+                    + ": \"{0}\"", ex.getMessage());
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "IO Error in " + inputfilename
