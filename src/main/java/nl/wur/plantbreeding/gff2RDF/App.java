@@ -65,7 +65,13 @@ public class App {
             }
 
             if (options.isArabidopsis()) {
-                ArabidopsisAction aa = new ArabidopsisAction();
+                ArabidopsisAction aa;
+                if (options.getFolder() != null
+                        && !options.getFolder().isEmpty()) {
+                    aa = new ArabidopsisAction(options.getFolder());
+                } else {
+                    aa = new ArabidopsisAction();
+                }
                 aa.download(options.isForceDl());
                 if (!options.isDlOnly()) {
                     aa.main(options.isDebug());
@@ -73,7 +79,13 @@ public class App {
             }
 
             if (options.isPotato()) {
-                PotatoAction pa = new PotatoAction();
+                PotatoAction pa;
+                if (options.getFolder() != null
+                        && !options.getFolder().isEmpty()) {
+                    pa = new PotatoAction(options.getFolder());
+                } else {
+                    pa = new PotatoAction();
+                }
                 pa.download(options.isForceDl());
                 pa.unzipFiles(options.isForceUnzip());
                 if (!options.isDlOnly()) {
@@ -127,7 +139,8 @@ public class App {
         System.out.println();
         URL url = new URL(urlstring);
         int ByteRead, ByteWritten = 0;
-        OutputStream outStream = new BufferedOutputStream(new FileOutputStream(outputfile));
+        OutputStream outStream = new BufferedOutputStream(
+                new FileOutputStream(outputfile));
 
         URLConnection uCon = url.openConnection();
         InputStream is = uCon.getInputStream();

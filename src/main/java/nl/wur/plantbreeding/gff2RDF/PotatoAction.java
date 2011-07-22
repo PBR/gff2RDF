@@ -44,6 +44,17 @@ public class PotatoAction {
     }
 
     /**
+     * Constructor.
+     *
+     * Creates a specific folder if asked.
+     * @param newfolder String of the new folder to use.
+     */
+    public PotatoAction(String newfolder) {
+        App.makeFolder(newfolder);
+        this.folder = newfolder;
+    }
+
+    /**
      * Set the folder in which the files will/are stored.
      * @param tmpfolder a String of the name of the folder.
      */

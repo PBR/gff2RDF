@@ -56,6 +56,9 @@ public class ClOptions {
      * @return
      */
     public String getFolder(){
+        if (this.folder != null && !this.folder.endsWith("/")){
+            this.folder = this.folder + "/";
+        }
         return this.folder;
     }
     /**
