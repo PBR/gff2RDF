@@ -103,7 +103,7 @@ public class ArabidopsisAction {
             // GFF file containing the gene information
             inputfilename = "At/TAIR10_GFF3_genes.gff";
             At_ParseGeneInfo parser = new At_ParseGeneInfo();
-            model = parser.getModelFromTbl(inputfilename, model);
+            model = parser.getModelFromGff(inputfilename, model);
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "IO Error in " + inputfilename

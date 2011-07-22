@@ -34,7 +34,7 @@ public class At_ParseGeneInfo {
             At_ParseGeneInfo.class.getName());
 
     /**
-     * This method parse the tbl files from TAIR and add the information
+     * This method parse the GFF files from TAIR and add the information
      * retrieved about the genes into the model given as parameter.
      * The gene information retrieved by this method are:
      *   - Gene ID
@@ -42,8 +42,6 @@ public class At_ParseGeneInfo {
      *       - Chromosome
      *       - Start position
      *       - Stop position
-     *   - Gene description
-     *   - GO terms associated with this gene
      *
      * @param inputfilename the path to the input file containing the gene
      * information
@@ -52,7 +50,7 @@ public class At_ParseGeneInfo {
      * information retrieved by this method.
      * @throws IOException When something goes wrong with a file.
      */
-    public final Model getModelFromTbl(final String inputfilename,
+    public final Model getModelFromGff(final String inputfilename,
             Model model) throws IOException {
 
         System.out.println("Parsing: " + inputfilename
