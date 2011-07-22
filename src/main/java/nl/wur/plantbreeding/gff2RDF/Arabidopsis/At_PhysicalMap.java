@@ -27,7 +27,7 @@ import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
 public class At_PhysicalMap {
 
     /** Logger used for outputing log information. */
-    private final Logger log = Logger.getLogger(
+    private static final Logger LOG = Logger.getLogger(
             At_PhysicalMap.class.getName());
 
     /**
@@ -83,9 +83,9 @@ public class At_PhysicalMap {
             model = obj2m.addToModel(marker, model);
         }
 
-        log.log(Level.FINE, cnt + " lines read");
-        log.log(Level.FINE, genecnt + " markers found");
-        log.log(Level.FINE, "Model has size: " + model.size());
+        LOG.log(Level.FINE, cnt + " lines read");
+        LOG.log(Level.FINE, genecnt + " markers found");
+        LOG.log(Level.FINE, "Model has size: " + model.size());
 
         return model;
     }

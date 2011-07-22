@@ -26,7 +26,7 @@ import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
 public class At_ParseGoGene {
 
     /** Logger used for outputing log information. */
-    private final Logger log = Logger.getLogger(
+    private static final Logger LOG = Logger.getLogger(
             At_ParseGoGene.class.getName());
 
     /**
@@ -87,9 +87,9 @@ public class At_ParseGoGene {
             model = obj2m.addToModel(gene, model);
         }
 
-        log.log(Level.FINE, cnt + " lines read");
-        log.log(Level.FINE, genecnt + " genes found");
-        log.log(Level.FINE, "Model has size: " + model.size());
+        LOG.log(Level.FINE, cnt + " lines read");
+        LOG.log(Level.FINE, genecnt + " genes found");
+        LOG.log(Level.FINE, "Model has size: " + model.size());
 
         return model;
     }

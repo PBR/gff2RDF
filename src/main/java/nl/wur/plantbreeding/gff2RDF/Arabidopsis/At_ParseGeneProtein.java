@@ -26,7 +26,7 @@ import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
 public class At_ParseGeneProtein {
 
     /** Logger used for outputing log information. */
-    private final Logger log = Logger.getLogger(
+    private static final Logger LOG = Logger.getLogger(
             At_ParseGeneProtein.class.getName());
 
     /**
@@ -70,8 +70,8 @@ public class At_ParseGeneProtein {
         }
         in.close();
 
-        log.log(Level.FINE, cnt + " lines read");
-        log.log(Level.FINE, "Final model has size: " + model.size());
+        LOG.log(Level.FINE, cnt + " lines read");
+        LOG.log(Level.FINE, "Final model has size: " + model.size());
 
         return model;
     }

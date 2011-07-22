@@ -25,9 +25,6 @@ public class ObjectToModel {
      * model.
      */
     private final String uri = new App().getUri();
-    /** Logger used for outputing log information. */
-    private final Logger log = Logger.getLogger(
-            ObjectToModel.class.getName());
 
     /**
      * This method add the given Arabidopsis thaliana gene information to the
