@@ -128,7 +128,7 @@ public class Marker {
      * @param tmpstart a int of the start position
      */
     public final void setStart(final String tmpstart) {
-        this.start = Integer.parseInt(tmpstart);
+        this.start = (int) Double.parseDouble(tmpstart);
     }
 
     /**
@@ -152,6 +152,6 @@ public class Marker {
      * @param tmpstop a int of the start position
      */
     public final void setStop(final String tmpstop) {
-        this.stop = Integer.parseInt(tmpstop);
+        this.stop = (int) Double.parseDouble(tmpstop);
     }
 }
