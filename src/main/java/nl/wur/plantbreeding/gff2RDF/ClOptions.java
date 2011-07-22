@@ -14,55 +14,71 @@ import org.kohsuke.args4j.Option;
  */
 public class ClOptions {
 
-    @Option(name="--tomato",
-        usage="Download the Tomato genome annotation (v2.31 from ITAG) and convert it to RDF")
+    @Option(name = "--tomato",
+    usage = "Download the Tomato genome annotation (v2.31 from ITAG) and convert it to RDF")
     private boolean tomato;
-
-    @Option(name="--arabidopsis",
-        usage="Download the Arabidopsis genome annotation (v10 from TAIR) and convert it to RDF")
+    @Option(name = "--arabidopsis",
+    usage = "Download the Arabidopsis genome annotation (v10 from TAIR) and convert it to RDF")
     private boolean arabidopsis;
-
-    @Option(name="--potato",
-        usage="Download the Potato genome annotation (v3.4 from PGSC) and convert it to RDF")
+    @Option(name = "--potato",
+    usage = "Download the Potato genome annotation (v3.4 from PGSC) and convert it to RDF")
     private boolean potato;
-
-    @Option(name="-h", aliases={"--help"},
-        usage="Print the usage and exit")
+    @Option(name = "-h", aliases = {"--help"},
+    usage = "Print the usage and exit")
     private boolean help;
-
-    @Option(name="--debug",
-        usage="Increase the verbosity of the output to help debugging")
+    @Option(name = "--debug",
+    usage = "Increase the verbosity of the output to help debugging")
     private boolean debug;
-
-    @Option(name="--force-download",
-        usage="Force the download of the files even if there are already found on their folder.")
+    @Option(name = "--force-download",
+    usage = "Force the download of the files even if there are already found on their folder.")
     private boolean forcedl;
-
-    @Option(name="--download-only",
-        usage="Performs only the download of the files")
+    @Option(name = "--force-unzip",
+    usage = "Force the extraction of the files even if there are already found on their folder.")
+    private boolean forceunzip;
+    @Option(name = "--download-only",
+    usage = "Performs only the download of the files")
     private boolean dlonly;
+
+    @Option(name = "--folder",
+    usage = "Specifies in which folder download/read the files of the annotation (by default it goes create a folder per specie).")
+    private String folder;
 
     /**
      * Returns whether the help argument was set.
      * @return the boolean help.
      */
-    public boolean isHelp(){
+    public boolean isHelp() {
         return this.help;
     }
 
     /**
+     * Retrieve the name of the folder
+     * @return
+     */
+    public String getFolder(){
+        return this.folder;
+    }
+    /**
      * Returns whether the download only argument was set.
      * @return the boolean dlonly.
      */
-    public boolean isDlOnly(){
+    public boolean isDlOnly() {
         return this.dlonly;
+    }
+
+    /**
+     * Returns whether the force extract only argument was set.
+     * @return the boolean forceunzip.
+     */
+    public boolean isForceUnzip() {
+        return this.forceunzip;
     }
 
     /**
      * Returns whether the forcedl argument was set.
      * @return the boolean forcedl.
      */
-    public boolean isForceDl(){
+    public boolean isForceDl() {
         return this.forcedl;
     }
 
@@ -70,7 +86,7 @@ public class ClOptions {
      * Returns whether the debug argument was set.
      * @return the boolean debug.
      */
-    public boolean isDebug(){
+    public boolean isDebug() {
         return this.debug;
     }
 
@@ -78,7 +94,7 @@ public class ClOptions {
      * Returns whether the tomato argument was set.
      * @return the boolean tomato.
      */
-    public boolean isTomato(){
+    public boolean isTomato() {
         return this.tomato;
     }
 
@@ -86,7 +102,7 @@ public class ClOptions {
      * Returns whether the potato argument was set.
      * @return the boolean potato.
      */
-    public boolean isPotato(){
+    public boolean isPotato() {
         return this.potato;
     }
 
@@ -94,7 +110,7 @@ public class ClOptions {
      * Returns whether the arabidopsis argument was set.
      * @return the boolean arabidopsis.
      */
-    public boolean isArabidopsis(){
+    public boolean isArabidopsis() {
         return this.arabidopsis;
     }
 }
