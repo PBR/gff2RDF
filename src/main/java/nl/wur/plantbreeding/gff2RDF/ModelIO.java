@@ -1,25 +1,17 @@
 package nl.wur.plantbreeding.gff2RDF;
 
-import com.hp.hpl.jena.iri.impl.Main;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This gives IO support for Jena Model (semantic graphes).
  * @author Pierre-Yves Chibon -- py@chibon.fr
  */
 public class ModelIO {
-
-    /** Logger used for outputing log information. */
-    private final Logger log = Logger.getLogger(Main.class.getName());
-
 
     /**
      *
