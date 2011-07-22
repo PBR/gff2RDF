@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.Potato.Po_ParseGeneInfo;
+import nl.wur.plantbreeding.gff2RDF.Potato.Po_ParseGeneDescription;
 
 /**
  * This is the action class which enables to download and export the genome
@@ -30,7 +31,6 @@ public class PotatoAction {
     /** Logger used for outputing log information. */
     private static final Logger LOG = Logger.getLogger(
             PotatoAction.class.getName());
-
     /** Folder in which the files are/will be stored. */
     private String folder = "Potato/";
 
@@ -58,7 +58,7 @@ public class PotatoAction {
      * Set the folder in which the files will/are stored.
      * @param tmpfolder a String of the name of the folder.
      */
-    public void setFolder(String tmpfolder){
+    public void setFolder(String tmpfolder) {
         this.folder = tmpfolder;
     }
 
@@ -80,7 +80,7 @@ public class PotatoAction {
     public void download(boolean force) throws IOException {
         HashMap<String, String> urls = new HashMap<String, String>();
         urls.put("http://potatogenomics.plantbiology.msu.edu/data/PGSC_DM_v3.4_gene_func.txt.zip",
-               this.folder + "PGSC_DM_v3.4_gene_func.txt.zip");
+                this.folder + "PGSC_DM_v3.4_gene_func.txt.zip");
         urls.put("http://potatogenomics.plantbiology.msu.edu/data/PGSC_DM_v3.4_gene.gff.zip",
                 this.folder + "PGSC_DM_v3.4_gene.gff.zip");
 
@@ -91,6 +91,7 @@ public class PotatoAction {
             cnt = cnt + 1;
             App.downaloadFile(key, urls.get(key), force);
         }
+        System.out.println();
     }
 
     /**
@@ -98,15 +99,19 @@ public class PotatoAction {
      * @param force a boolean whether to force the extraction of the files from
      * the zip archive if they are already present in the filesystem or not.
      */
-    public void unzipFiles(boolean force){
-        String inputfilename = this.folder + "PGSC_DM_v3.4_gene.gff.zip";
-        try {
-            App.extractZipFile(inputfilename, this.folder , force);
-        } catch (IOException ex) {
-            System.err.println();
-            LOG.log(Level.SEVERE, "Unzip Error in " + inputfilename
-                    + ": \"{0}\"", ex.getMessage());
+    public void unzipFiles(boolean force) {
+        String[] files = {"PGSC_DM_v3.4_gene.gff.zip",
+            "PGSC_DM_v3.4_gene_func.txt.zip"};
+        for (String file : files) {
+            try {
+                App.extractZipFile(this.folder + file, this.folder, force);
+            } catch (IOException ex) {
+                System.err.println();
+                LOG.log(Level.SEVERE, "Unzip Error in " + this.folder + file
+                        + ": \"{0}\"", ex.getMessage());
+            }
         }
+        System.out.println();
     }
 
     /**
@@ -124,6 +129,20 @@ public class PotatoAction {
             inputfilename = this.folder + "PGSC_DM_v3.4_gene.gff";
             Po_ParseGeneInfo parser = new Po_ParseGeneInfo();
             model = parser.getModelFromGff(inputfilename, model);
+        } catch (IOException ex) {
+            System.err.println();
+            LOG.log(Level.SEVERE, "IO Error in " + inputfilename
+                    + ": \"{0}\"", ex.getMessage());
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
+        }
+
+        try {
+            // GFF file containing the gene information
+            inputfilename = this.folder + "PGSC_DM_v3.4_gene_func.txt";
+            Po_ParseGeneDescription parser = new Po_ParseGeneDescription();
+            model = parser.addGeneDescriptionToModel(inputfilename, model);
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "IO Error in " + inputfilename

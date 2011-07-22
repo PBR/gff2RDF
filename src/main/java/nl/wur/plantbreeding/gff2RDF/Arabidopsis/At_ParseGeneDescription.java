@@ -39,7 +39,7 @@ public class At_ParseGeneDescription {
      * description retrieved by this method.
      * @throws IOException When something goes wrong with a file.
      */
-    public final Model getModelFromTbl(final String inputfilename,
+    public final Model addGeneDescriptionToModel(final String inputfilename,
             Model model) throws IOException {
 
         System.out.println("Parsing: " + inputfilename

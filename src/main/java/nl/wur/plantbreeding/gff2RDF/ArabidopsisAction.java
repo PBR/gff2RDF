@@ -142,7 +142,7 @@ public class ArabidopsisAction {
             App.cleanFile(inputfilename);
             inputfilename = inputfilename + "-cleaned";
             At_ParseGeneDescription parser = new At_ParseGeneDescription();
-            model = parser.getModelFromTbl(inputfilename, model);
+            model = parser.addGeneDescriptionToModel(inputfilename, model);
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "IO Error in " + inputfilename
