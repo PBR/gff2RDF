@@ -15,14 +15,11 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_GeneticMap;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneDescription;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneInfo;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGeneProtein;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_ParseGoGene;
-import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_PhysicalMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
@@ -74,6 +71,16 @@ public class App {
                     aa.main(options.isDebug());
                 }
             }
+
+            if (options.isPotato()) {
+                PotatoAction pa = new PotatoAction();
+                pa.download(options.isForceDl());
+                pa.unzipFiles(options.isForceUnzip());
+                if (!options.isDlOnly()) {
+                    pa.main(options.isDebug());
+                }
+            }
+
         } catch (CmdLineException e) {
             LOG.log(Level.SEVERE, "Error in the command line: {0}",
                     e.getMessage());
@@ -119,7 +126,7 @@ public class App {
         }
         System.out.println();
         URL url = new URL(urlstring);
-        int ByteRead,ByteWritten=0;
+        int ByteRead, ByteWritten = 0;
         OutputStream outStream = new BufferedOutputStream(new FileOutputStream(outputfile));
 
         URLConnection uCon = url.openConnection();
@@ -192,5 +199,37 @@ public class App {
         br.close();
     }
 
-
+    /**
+     * This function extract a specified zip archive.
+     * @param inputfile String of the url of the file
+     * @param folder String of the name of the folder in which the files should
+     * be extracted
+     * @param force boolean whether to extract the file if it is already
+     * present locally
+     * @throws IOException if something goes wrong while writing the file
+     */
+    public static void extractZipFile(String inputfile, String folder,
+            boolean force) throws IOException {
+        System.out.println("Trying to extract files from: '" + inputfile);
+        ZipFile zf = new ZipFile(inputfile);
+        Enumeration e = zf.entries();
+        while (e.hasMoreElements()) {
+            ZipEntry ze = (ZipEntry) e.nextElement();
+            File f = new File(folder + "/" + ze.getName());
+            if (f.exists() && !force) {
+                System.out.println("  -- no need \n");
+                LOG.log(Level.FINE, "The file {0} already exists, no need to re-download it",
+                        folder + "/" + ze.getName());
+                return;
+            }
+            System.out.println("  Unzipping: " + folder + "/" + ze.getName());
+            FileOutputStream fout = new FileOutputStream(folder + "/" + ze.getName());
+            InputStream in = zf.getInputStream(ze);
+            for (int c = in.read(); c != -1; c = in.read()) {
+                fout.write(c);
+            }
+            in.close();
+            fout.close();
+        }
+    }
 }
