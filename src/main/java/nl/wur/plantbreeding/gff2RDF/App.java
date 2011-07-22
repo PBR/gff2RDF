@@ -131,12 +131,11 @@ public class App {
                 + "' from :\n " + urlstring);
         File f = new File(outputfile);
         if (f.exists() && !force) {
-            System.out.println("  -- no need \n");
+            System.out.println("  -- no need");
             LOG.log(Level.FINE, "The file {0} already exists, no need to re-download it",
                     outputfile);
             return;
         }
-        System.out.println();
         URL url = new URL(urlstring);
         int ByteRead, ByteWritten = 0;
         OutputStream outStream = new BufferedOutputStream(
@@ -230,7 +229,7 @@ public class App {
             ZipEntry ze = (ZipEntry) e.nextElement();
             File f = new File(folder + "/" + ze.getName());
             if (f.exists() && !force) {
-                System.out.println("  -- no need \n");
+                System.out.println("  -- no need");
                 LOG.log(Level.FINE, "The file {0} already exists, no need to re-download it",
                         folder + "/" + ze.getName());
                 return;

@@ -109,6 +109,7 @@ public class ArabidopsisAction {
             cnt = cnt + 1;
             App.downaloadFile(key, urls.get(key), force);
         }
+        System.out.println();
     }
 
     /**
