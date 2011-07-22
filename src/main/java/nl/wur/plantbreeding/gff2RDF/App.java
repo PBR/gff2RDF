@@ -96,6 +96,16 @@ public class App {
         return this.uri;
     }
 
+    /**
+     * This function download from the internet the specified file.
+     * @param urlstring String of the url of the file
+     * @param outputfile String of the name of the file that will be stored
+     * locally
+     * @param force boolean whether to download the file if it is already
+     * present locally
+     * @throws MalformedURLException if there is a problem in the URL.
+     * @throws IOException if something goes wrong while writing the file
+     */
     public static void downaloadFile(String urlstring, String outputfile, boolean force)
             throws MalformedURLException, IOException {
         System.out.println("Trying to download file: '" + outputfile
@@ -127,6 +137,11 @@ public class App {
 //        fos.getChannel().transferFrom(rbc, 0, 1 << 24);
     }
 
+    /**
+     * This function creates the folder of the given name if it does not already
+     * exists.
+     * @param foldername String of the name of the folder.
+     */
     public static void makeFolder(String foldername) {
         System.out.println(
                 "The files downloaded and generated will be stored in the folder "
@@ -176,4 +191,6 @@ public class App {
         out.close();
         br.close();
     }
+
+
 }
