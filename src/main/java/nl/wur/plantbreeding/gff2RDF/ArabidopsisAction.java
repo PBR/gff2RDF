@@ -37,13 +37,24 @@ public class ArabidopsisAction {
     private static final Logger LOG = Logger.getLogger(
             ArabidopsisAction.class.getName());
 
+    /** Folder in which the files are/will be stored. */
+    private String folder = "At/";
+
     /**
      * Default constructor.
      *
      * Creates the folder 'At' if necessary.
      */
     public ArabidopsisAction() {
-        App.makeFolder("At");
+        App.makeFolder(this.folder);
+    }
+
+    /**
+     * Set the folder in which the files will/are stored.
+     * @param tmpfolder a String of the name of the folder.
+     */
+    public void setFolder(String tmpfolder){
+        this.folder = tmpfolder;
     }
 
     /**
@@ -70,15 +81,15 @@ public class ArabidopsisAction {
     public void download(boolean force) throws IOException {
         HashMap<String, String> urls = new HashMap<String, String>();
         urls.put("ftp://ftp.arabidopsis.org/home/tair/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff",
-                "At/TAIR10_GFF3_genes.gff");
+                this.folder + "TAIR10_GFF3_genes.gff");
         urls.put("ftp://ftp.arabidopsis.org/home/tair/Genes/TAIR10_genome_release/TAIR10_functional_descriptions",
-                "At/TAIR10_functional_descriptions");
+                this.folder + "TAIR10_functional_descriptions");
         urls.put("ftp://ftp.arabidopsis.org/home/tair/Ontologies/Gene_Ontology/ATH_GO_GOSLIM.txt",
-                "At/ATH_GO_GOSLIM.txt");
+                this.folder + "ATH_GO_GOSLIM.txt");
         urls.put("ftp://ftp.arabidopsis.org/home/tair/Proteins/Id_conversions/AGI2Uniprot.20101118",
-                "At/AGI2Uniprot.20101118");
+                this.folder + "AGI2Uniprot.20101118");
         urls.put("http://dbsgap.versailles.inra.fr/vnat/Documentation/8/CvixCol_MapCoord.xls",
-                "At/CvixCol_MapCoord.xls");
+                this.folder + "CvixCol_MapCoord.xls");
 
         Set<String> urlset = urls.keySet();
         int cnt = 0;
@@ -101,7 +112,7 @@ public class ArabidopsisAction {
 
         try {
             // GFF file containing the gene information
-            inputfilename = "At/TAIR10_GFF3_genes.gff";
+            inputfilename = this.folder + "TAIR10_GFF3_genes.gff";
             At_ParseGeneInfo parser = new At_ParseGeneInfo();
             model = parser.getModelFromGff(inputfilename, model);
         } catch (IOException ex) {
@@ -115,7 +126,7 @@ public class ArabidopsisAction {
 
         try {
             // File containing the gene description
-            inputfilename = "At/TAIR10_functional_descriptions";
+            inputfilename = this.folder + "TAIR10_functional_descriptions";
             App.cleanFile(inputfilename);
             inputfilename = inputfilename + "-cleaned";
             At_ParseGeneDescription parser = new At_ParseGeneDescription();
@@ -132,7 +143,7 @@ public class ArabidopsisAction {
         try {
             // GFF file containing GO annotation for genes
             // used release from : 05/17/2011     06:33:00 AM
-            inputfilename = "At/ATH_GO_GOSLIM.txt";
+            inputfilename = this.folder + "ATH_GO_GOSLIM.txt";
             At_ParseGoGene parser = new At_ParseGoGene();
             model = parser.getModelFromAthGo(inputfilename, model);
         } catch (IOException ex) {
@@ -146,7 +157,7 @@ public class ArabidopsisAction {
 
         try {
             // AGI2 Uniprot adding Gene Protein relation
-            inputfilename = "At/AGI2Uniprot.20101118";
+            inputfilename = this.folder + "AGI2Uniprot.20101118";
             At_ParseGeneProtein parser = new At_ParseGeneProtein();
             model = parser.getModelFromAGI2Uniprot(inputfilename, model);
         } catch (IOException ex) {
@@ -160,9 +171,10 @@ public class ArabidopsisAction {
 
         try {
             // Add physical location of the markers
-            inputfilename = "At/CvixCol_Physic.csv";
-            ExcelIO.convertToCsv("At/CvixCol_MapCoord.xls", "CvixCol_Physic",
-                    "At/CvixCol_Physic.csv");
+            inputfilename = this.folder + "CvixCol_Physic.csv";
+            ExcelIO.convertToCsv(this.folder + "CvixCol_MapCoord.xls",
+                    "CvixCol_Physic",
+                    this.folder + "CvixCol_Physic.csv");
             At_PhysicalMap parser = new At_PhysicalMap();
             model = parser.getModelFromPhysicalMap(inputfilename, model);
         } catch (InvalidFormatException ex) {
@@ -183,9 +195,10 @@ public class ArabidopsisAction {
 
         try {
             // Add genomic location of the markers
-            inputfilename = "At/CvixCol_Genetic.csv";
-            ExcelIO.convertToCsv("At/CvixCol_MapCoord.xls", "CvixCol_Genetic",
-                    "At/CvixCol_Genetic.csv");
+            inputfilename = this.folder + "CvixCol_Genetic.csv";
+            ExcelIO.convertToCsv(this.folder + "CvixCol_MapCoord.xls",
+                    "CvixCol_Genetic",
+                    this.folder + "/CvixCol_Genetic.csv");
             At_GeneticMap parser = new At_GeneticMap();
             model = parser.getModelFromGeneticMap(inputfilename, model);
         } catch (InvalidFormatException ex) {
@@ -208,7 +221,7 @@ public class ArabidopsisAction {
         try {
             if (!model.isEmpty()) {
                 ModelIO mio = new ModelIO();
-                String outputfilename = "At/genemodel.rdf";
+                String outputfilename = this.folder + "genemodel.rdf";
                 mio.printModelToFile(model, outputfilename);
             }
         } catch (IOException ex) {
