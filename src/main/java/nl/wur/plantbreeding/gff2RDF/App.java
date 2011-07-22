@@ -1,5 +1,6 @@
 package nl.wur.plantbreeding.gff2RDF;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -8,11 +9,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.Arabidopsis.At_GeneticMap;
@@ -68,7 +71,7 @@ public class App {
             if (options.isArabidopsis()) {
                 ArabidopsisAction aa = new ArabidopsisAction();
                 aa.download(options.isForceDl());
-                if (!options.isDlOnly()){
+                if (!options.isDlOnly()) {
                     aa.main(options.isDebug());
                 }
             }
@@ -94,10 +97,10 @@ public class App {
         return this.uri;
     }
 
-    public static void downaloadFile(String url, String outputfile, boolean force)
+    public static void downaloadFile(String urlstring, String outputfile, boolean force)
             throws MalformedURLException, IOException {
         System.out.println("Trying to download file: '" + outputfile
-                + "' from :\n " + url);
+                + "' from :\n " + urlstring);
         File f = new File(outputfile);
         if (f.exists() && !force) {
             System.out.println("  -- no need \n");
@@ -106,10 +109,23 @@ public class App {
             return;
         }
         System.out.println();
-        URL google = new URL(url);
-        ReadableByteChannel rbc = Channels.newChannel(google.openStream());
-        FileOutputStream fos = new FileOutputStream(outputfile);
-        fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+        URL url = new URL(urlstring);
+        int ByteRead,ByteWritten=0;
+        OutputStream outStream = new BufferedOutputStream(new FileOutputStream(outputfile));
+
+        URLConnection uCon = url.openConnection();
+        InputStream is = uCon.getInputStream();
+        byte[] buf = new byte[1024];
+        while ((ByteRead = is.read(buf)) != -1) {
+            outStream.write(buf, 0, ByteRead);
+            ByteWritten += ByteRead;
+        }
+        is.close();
+        outStream.close();
+//        URL url = new URL(urlstring);
+//        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+//        FileOutputStream fos = new FileOutputStream(outputfile);
+//        fos.getChannel().transferFrom(rbc, 0, 1 << 24);
     }
 
     public static void makeFolder(String foldername) {
