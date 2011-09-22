@@ -254,7 +254,24 @@ public class ObjectToModel {
 
         final Resource protein = model.createResource(proteinuri + protid);
         gene.addProperty(model.createProperty(geneuri + "Protein"), protein);
+        return model;
+    }
 
+    /**
+     * Add the given description to a given gene in the given Jena Model.
+     * @param protid1 the protein id of the first protein (used in the URI).
+     * @param protid2 the protein id of the second protein (used in the URI).
+     * @param model the model in which this gene and its description go
+     * @return the Jena Model with the added information
+     */
+    public final Model addProteinProteinInteractionToModel(final String protid1,
+            String protid2, final Model model) {
+        String proturi = uri + "PROTEIN#";
+        Resource prot1 = model.createResource(proturi + protid1);
+        Resource prot2 = model.createResource(proturi + protid2);
+        prot1.addProperty(RDF.type, proturi);
+        prot2.addProperty(RDF.type, proturi);
+        prot1.addProperty(model.createProperty(proturi + "Interact"), prot2);
         return model;
     }
 }
