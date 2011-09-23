@@ -41,7 +41,7 @@ public class PPI {
      */
     public static void main(final String[] args) {
         String folder = "/home/pierrey/Documents/Projects/Marker2Sequence/";
-        String filename = "intact-50.txt";
+        String filename = "intact.txt";
 
         Model model = ModelFactory.createDefaultModel();
         try {

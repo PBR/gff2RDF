@@ -272,6 +272,7 @@ public class ObjectToModel {
         prot1.addProperty(RDF.type, proturi);
         prot2.addProperty(RDF.type, proturi);
         prot1.addProperty(model.createProperty(proturi + "Interact"), prot2);
+        prot2.addProperty(model.createProperty(proturi + "Interact"), prot1);
         return model;
     }
 }
