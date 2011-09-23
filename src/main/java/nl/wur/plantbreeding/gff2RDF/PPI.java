@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package nl.wur.plantbreeding.gff2RDF;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -12,6 +11,10 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.object.Gene;
@@ -40,12 +43,31 @@ public class PPI {
      * @param args command line argument given
      */
     public static void main(final String[] args) {
-        String folder = "/home/pierrey/Documents/Projects/Marker2Sequence/";
-        String filename = "intact.txt";
+
+        HashMap<String, String> urls = new HashMap<String, String>();
+        urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.txt",
+                "intact.txt");
+        urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact-clustered.txt",
+                "intact-clustered.txt");
+        Set<String> urlset = urls.keySet();
+        int cnt = 0;
+        for (Iterator<String> it = urlset.iterator(); it.hasNext();) {
+            String key = it.next();
+            cnt = cnt + 1;
+            try {
+                App.downaloadFile(key, urls.get(key), false);
+            } catch (IOException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+        }
+        System.out.println();
 
         Model model = ModelFactory.createDefaultModel();
         try {
-            model = PPI.getModelFromGff(folder + filename, model);
+            for (Iterator<String> it = urlset.iterator(); it.hasNext();) {
+                String key = it.next();
+                model = PPI.getModelFromGff(urls.get(key), model);
+            }
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
@@ -60,7 +82,7 @@ public class PPI {
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "Error while writting: {0}", ex.getMessage());
-                ex.printStackTrace(System.err);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -111,5 +133,4 @@ public class PPI {
 
         return model;
     }
-
 }
