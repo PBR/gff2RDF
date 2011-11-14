@@ -123,6 +123,20 @@ public class App {
                 }
             }
 
+            if (options.isTomato()) {
+                TomatoAction ta;
+                if (options.getFolder() != null
+                        && !options.getFolder().isEmpty()) {
+                    ta = new TomatoAction(options.getFolder());
+                } else {
+                    ta = new TomatoAction();
+                }
+                ta.download(options.isForceDl());
+                if (!options.isDlOnly()) {
+                    ta.main(options.isDebug());
+                }
+            }
+
         } catch (CmdLineException e) {
             LOG.log(Level.SEVERE, "Error in the command line: {0}",
                     e.getMessage());
