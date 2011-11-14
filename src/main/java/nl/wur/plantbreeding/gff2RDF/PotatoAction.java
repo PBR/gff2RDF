@@ -20,7 +20,8 @@ import nl.wur.plantbreeding.gff2RDF.Potato.Po_ParseGeneDescription;
  * annotation from Potato to RDF.
  *
  * The main function are the download and main functions.
- * The first one just download the files into the 'Potato' directory from TAIR.
+ * The first one just download the files into the 'Potato' directory from
+ * the PGSC.
  * The second one reads them and export them into the Jena Model which is then
  * writen as RDF if not empty.
  *
