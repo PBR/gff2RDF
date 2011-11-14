@@ -143,15 +143,15 @@ public class ObjectToModel {
         Resource scaffold = model.createResource(scaffolduri
                 + marker.getChromosome());
         scaffold.addProperty(RDF.type, scaffolduri);
+
         if (marker.getChromosome() != null
                 && !marker.getChromosome().isEmpty()) {
+
+            // Add the scaffold name
             scaffold.addProperty(model.createProperty(scaffolduri
                     + "ScaffoldName"), marker.getChromosome());
-        }
 
-        // Create the position node
-        if (marker.getChromosome() != null
-                && !marker.getChromosome().isEmpty()) {
+            // Create the position node to the physical and genetic map
             if (marker.isGenetic()) {
                 // Genetic location of the marker
                 markerres.addProperty(model.createProperty(markeruri
