@@ -80,7 +80,7 @@ public class At_ParseGeneInfo {
                 gene.setLocus(locus);
                 String function = content[content.length - 1].split(
                         "Note=")[1].split(";")[0];
-                gene.setFunction(function);
+                gene.setDescription(function);
 
                 // Add gene to model
                 model = obj2m.addToModel(gene, model);
