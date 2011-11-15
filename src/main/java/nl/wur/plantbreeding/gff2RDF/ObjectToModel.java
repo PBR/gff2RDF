@@ -25,6 +25,25 @@ public class ObjectToModel {
      * model.
      */
     private final String uri = new App().getUri();
+    /** The uri used to specify gene type and gene attributes. */
+    private final String geneuri = uri + "GENE#";
+    /** The uri used to specify scaffold type and scaffold attributes. */
+    private final String scaffolduri = uri + "SCAFFOLD#";
+    /** The uri used to specify marker type and marker attributes. */
+    private final String markeruri = uri + "MARKER#";
+    /** The uri used to specify position type and position attributes. */
+    private final String positionuri = uri + "POSITION#";
+    /** The uri used to specify map position type and map position attributes. */
+    private final String mappositionuri = uri + "MAPPOSITION#";
+    /** The uri used to specify GO type and GO attribute.
+     * This is the URI used by geneontology.org
+     */
+    private final String gouri = "http://purl.org/obo/owl/GO#";
+    /** The uri used to specify protein type and protein attribute.
+     * This is the URI used by uniprot.
+     */
+    private final String proteinuri = "http://purl.uniprot.org/uniprot/";
+    
 
     /**
      * This method add the given Arabidopsis thaliana gene information to the
@@ -35,10 +54,6 @@ public class ObjectToModel {
      */
     public final Model addToModel(final Gene geneobj, final Model model) {
         // Set the different URI that will be used
-        String geneuri = uri + "GENE#";
-        String scaffolduri = uri + "SCAFFOLD#";
-        String positionuri = uri + "POSITION#";
-        String gouri = "http://purl.org/obo/owl/GO#";
 
         // Create the scaffold node, add type and name
         Resource scaffold = model.createResource(scaffolduri
@@ -98,9 +113,6 @@ public class ObjectToModel {
      */
     public final Model addToModel(final At_GeneProtein agp, final Model model) {
         // Set the different URI that will be used
-        String geneuri = uri + "GENE#";
-        String proteinuri = "http://purl.uniprot.org/uniprot/";
-
 
         // Create the gene node and add the type
         Resource gene = model.createResource(geneuri + agp.getLocus());
@@ -126,12 +138,6 @@ public class ObjectToModel {
      * information about the marker.
      */
     public final Model addToModel(final Marker marker, final Model model) {
-        // Set the different URI that will be used
-        String markeruri = uri + "MARKER#";
-        String positionuri = uri + "POSITION#";
-        String mappositionuri = uri + "MAPPOSITION#";
-        String scaffolduri = uri + "SCAFFOLD#";
-
         // Create the gene node and add the type
         Resource markerres = model.createResource(markeruri
                 + marker.getName());
@@ -188,11 +194,27 @@ public class ObjectToModel {
         description = description.replaceAll("&#1", "");
         description = StringEscapeUtils.unescapeHtml(description);
         description = description.replaceAll("&", "");
-        String geneuri = uri + "GENE#";
         Resource gene = model.createResource(geneuri + geneid);
         gene.addProperty(RDF.type, geneuri);
         gene.addProperty(model.createProperty(geneuri + "Description"),
                 description);
+        return model;
+    }
+
+    /**
+     * Link the given protein (ID) to the given gene (ID) in the provided Model.
+     * @param model a Jena Model in which the gene will be linked to the protein.
+     * @param geneid a String representing the gene identifier.
+     * @param protid a String representing the protein identifier
+     * @return the Jena Model linking the gene to the protein.
+     */
+    public Model addProteinToModel(Model model, String geneid, String protid) {
+        final Resource gene = model.createResource(geneuri + geneid);
+        gene.addProperty(RDF.type, geneuri);
+
+        final Resource protein = model.createResource(proteinuri + protid);
+        gene.addProperty(model.createProperty(geneuri + "Protein"), protein);
+
         return model;
     }
 }
