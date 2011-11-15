@@ -14,6 +14,15 @@ public class Marker {
     /** Name of the marker. */
     private String name = "";
     /**
+     * ID of the marker, if not empty it will be used for the URI, otherwise
+     * the name will be.
+     */
+    private String id = "";
+    /** SGN markers have their own identifier which we use in one query.
+     */
+    private String sgnid = "";
+
+    /**
      * Position of the marker either on the genetic map or on the physical map.
      */
     private String position;
@@ -154,4 +163,42 @@ public class Marker {
     public final void setStop(final String tmpstop) {
         this.stop = (int) Double.parseDouble(tmpstop);
     }
+
+    /**
+     * Return the id of the marker if this one is not empty, otherwise returns
+     * the name.
+     * @return a String which is either the id if it is set or the name.
+     */
+    public String getId() {
+        if (this.id == null || this.id.isEmpty()){
+            return this.name;
+        } else {
+            return this.id;
+        }
+    }
+
+    /**
+     * Set the id of the marker to be used in the URI.
+     * @param idtmp a String of the marker identifier.
+     */
+    public void setId(String idtmp) {
+        this.id = idtmp;
+    }
+
+    /**
+     * Retrieve the SGN Identifier used for this marker.
+     * @return a String of the SGN identifier.
+     */
+    public String getSgnid() {
+        return sgnid;
+    }
+
+    /**
+     * Set the SGN identifier of this marker.
+     * @param sgnidtmp a String of the SGN identifier.
+     */
+    public void setSgnid(String sgnidtmp) {
+        this.sgnid = sgnidtmp;
+    }
+
 }
