@@ -137,6 +137,20 @@ public class App {
                 }
             }
 
+            if (options.getMap() != null
+                    && !options.getMap().isEmpty()) {
+                MapAction ma;
+                if (options.getFolder() != null
+                        && !options.getFolder().isEmpty()) {
+                    ma = new MapAction(options.getFolder());
+                } else {
+                    ma = new MapAction();
+                }
+                if (!options.isDlOnly()) {
+                    ma.main(options.getMap(), options.isDebug());
+                }
+            }
+
         } catch (CmdLineException e) {
             LOG.log(Level.SEVERE, "Error in the command line: {0}",
                     e.getMessage());
