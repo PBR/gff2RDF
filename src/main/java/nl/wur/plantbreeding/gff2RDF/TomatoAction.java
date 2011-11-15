@@ -81,6 +81,8 @@ class TomatoAction {
         HashMap<String, String> urls = new HashMap<String, String>();
         urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2_release/ITAG2_genomic_all.gff3",
                 this.folder + "ITAG2_genomic_all.gff3");
+        urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2_release/ITAG2_protein_functional.gff3",
+                this.folder + "ITAG2_protein_functional.gff3");
 
         Set<String> urlset = urls.keySet();
         int cnt = 0;
@@ -116,6 +118,19 @@ class TomatoAction {
             }
         }
 
+        try {
+            // GFF file containing the protein information
+            inputfilename = this.folder + "ITAG2_protein_functional.gff3";
+            To_ParseGeneInfo parser = new To_ParseGeneInfo();
+            model = parser.addProteinsToModel(inputfilename, model);
+        } catch (IOException ex) {
+            System.err.println();
+            LOG.log(Level.SEVERE, "IO Error in " + inputfilename
+                    + ": \"{0}\"", ex.getMessage());
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
+        }
 
         System.out.println("Model final: " + model.size());
         try {
