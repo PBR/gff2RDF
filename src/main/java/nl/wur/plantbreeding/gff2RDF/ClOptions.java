@@ -43,6 +43,11 @@ public class ClOptions {
     usage = "Specifies in which folder download/read the files of the annotation (by default it goes create a folder per specie).")
     private String folder;
 
+    @Option(name = "--map",
+    usage = "Specifies a genetic map to add to the model. "
+            + "The file should be present in the file system, tab delimited and have four columns: ID (used in the URI), name, chromosome, map position")
+    private String map;
+
     /**
      * Returns whether the help argument was set.
      * @return the boolean help.
@@ -116,4 +121,14 @@ public class ClOptions {
     public boolean isArabidopsis() {
         return this.arabidopsis;
     }
+
+    /**
+     * Returns the map set in the command line.
+     * @return a String of the path to the map file.
+     */
+    public String getMap() {
+        return map;
+    }
+
+
 }
