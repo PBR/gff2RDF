@@ -15,8 +15,10 @@ public class Gene {
 
     /** Locus of the gene. */
     private String locus = "";
-    /** Function of the gene. */
-    private String function = "";
+    /** Type of the gene. */
+    private String type = "";
+    /** Description of the gene. */
+    private String description = "";
     /** Gene synonym. */
     private String synonym = "";
     /** Name of the gene. */
@@ -31,20 +33,37 @@ public class Gene {
     private String chromosome;
 
     /**
-     * Return the function of the gene.
-     * @return String describing the function of the gene
+     * Return the type of the gene.
+     * @return String describing the type of the gene
      */
-    public final String getFunction() {
-        return function;
+    public final String getType() {
+        return type;
     }
 
     /**
-     * Set the function of the gene.
-     * @param tmpfunction String describing the function of the gene
+     * Set the type of the gene.
+     * @param typetmp String describing the type of the gene
      */
-    public final void setFunction(final String tmpfunction) {
-        this.function = tmpfunction;
+    public final void setType(final String typetmp) {
+        this.type = typetmp;
     }
+
+    /**
+     * Return a String description the function of the gene.
+     * @return a String describing the gene.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the description of the gene (its function).
+     * @param description a String representing the description of the gene.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
     /**
      * Get the list of GO terms associated with this gene.
@@ -225,8 +244,9 @@ public class Gene {
         StringBuilder result = new StringBuilder();
         result.append(this.getClass().getName()).append(" Object {").append(newline);
         result.append("Name: ").append(this.name).append(newline);
+        result.append("Description: ").append(this.description).append(newline);
         result.append("Synonym: ").append(this.synonym).append(newline);
-        result.append("Function: ").append(this.function).append(newline);
+        result.append("Type: ").append(this.type).append(newline);
         result.append("Locus: ").append(this.locus).append(newline);
         result.append("Chromosome: ").append(this.chromosome).append(newline);
         result.append("Start: ").append(this.start).append(newline);
