@@ -74,9 +74,11 @@ public class ObjectToModel {
         gene.addProperty(RDF.type, geneuri);
         gene.addProperty(model.createProperty(geneuri + "FeatureName"),
                 geneobj.getLocus());
-        if (geneobj.getFunction() != null && !geneobj.getFunction().isEmpty()) {
+        gene.addProperty(model.createProperty(geneuri + "Description"),
+                geneobj.getDescription());
+        if (geneobj.getType() != null && !geneobj.getType().isEmpty()) {
             gene.addProperty(model.createProperty(geneuri + "FeatureType"),
-                geneobj.getFunction());
+                geneobj.getType());
         }
 
         // Create the position node, add type and start, stop and chr
@@ -144,10 +146,15 @@ public class ObjectToModel {
     public final Model addToModel(final Marker marker, final Model model) {
         // Create the gene node and add the type
         Resource markerres = model.createResource(markeruri
-                + marker.getName());
+                + marker.getId());
         markerres.addProperty(model.createProperty(markeruri
                         + "MarkerName"), marker.getName());
         markerres.addProperty(RDF.type, markeruri);
+
+        if (marker.getSgnid() != null && !marker.getSgnid().isEmpty()){
+            markerres.addProperty(model.createProperty(markeruri
+                           + "SGN-ID"), marker.getSgnid());
+        }
 
         // Create the scaffold node, add type and name
         Resource scaffold = model.createResource(scaffolduri
