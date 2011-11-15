@@ -20,6 +20,10 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public class ObjectToModel {
 
+    /** Logger used for outputing log information. */
+    private static final Logger LOG = Logger.getLogger(
+            ObjectToModel.class.getName());
+
     /**
      * This is the based URI which will be used in the construction of the
      * model.
