@@ -266,13 +266,11 @@ public class ObjectToModel {
      */
     public final Model addProteinProteinInteractionToModel(final String protid1,
             String protid2, final Model model) {
-        String proturi = "http://purl.uniprot.org/uniprot/";
-        Resource prot1 = model.createResource(proturi + protid1);
-        Resource prot2 = model.createResource(proturi + protid2);
-        prot1.addProperty(RDF.type, proturi);
-        prot2.addProperty(RDF.type, proturi);
-        prot1.addProperty(model.createProperty(proturi + "Interact"), prot2);
-        prot2.addProperty(model.createProperty(proturi + "Interact"), prot1);
+        String prot_uri = "http://purl.uniprot.org/core/";
+        Resource prot1 = model.createResource(proteinuri + protid1);
+        Resource prot2 = model.createResource(proteinuri + protid2);
+        prot1.addProperty(model.createProperty(prot_uri + "Interact"), prot2);
+        prot2.addProperty(model.createProperty(prot_uri + "Interact"), prot1);
         return model;
     }
 }
