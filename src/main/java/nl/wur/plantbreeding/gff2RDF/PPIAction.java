@@ -11,19 +11,23 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.wur.plantbreeding.gff2RDF.object.Gene;
 
 /**
+ * This is the action class which enables to download and export protein-protein
+ * interaction from EBI into RDF.
  *
- * @author pierrey
+ * The main function are the download and main functions.
+ * The first one just download the files into the 'PPI_files' directory from EBI.
+ * The second one reads them and export them into the Jena Model which is then
+ * writen as RDF if not empty.
+ * @author Pierre-Yves Chibon -- py@chibon.fr
  */
-public class PPI {
+public class PPIAction {
 
     /**
      * This URI is the based used to create the RDF of non-standard URI.
@@ -37,39 +41,82 @@ public class PPI {
     /** Logger used for outputing log information. */
     private static final Logger LOG = Logger.getLogger(
             ObjectToModel.class.getName());
+    /** Folder in which the files are/will be stored. */
+    private String folder = "PPI_files/";
 
     /**
-     * Start-up function.
-     * @param args command line argument given
+     * Default constructor.
+     *
+     * Creates the folder 'PPI_files' if necessary.
      */
-    public static void main(final String[] args) {
+    public PPIAction() {
+        App.makeFolder(this.folder);
+    }
 
+    /**
+     * Constructor.
+     *
+     * Creates a specific folder if asked.
+     * @param newfolder String of the new folder to use.
+     */
+    public PPIAction(String newfolder) {
+        App.makeFolder(newfolder);
+        this.folder = newfolder;
+    }
+
+    /**
+     * Set the folder in which the files will/are stored.
+     * @param tmpfolder a String of the name of the folder.
+     */
+    public void setFolder(String tmpfolder){
+        this.folder = tmpfolder;
+    }
+
+    /**
+     * This function downloads the file of the ftp server of EBI.
+     *
+     * The files are:
+     *   - intact.txt: each line of intact.txt refers to a single interaction
+     *   - intact-clustered.txt: add other interactions
+     *
+     * @param force boolean, whether to force the download of the files or not.
+     * @throws IOException if something goes wrong when trying to download the
+     * files.
+     */
+    public void download(boolean force) throws IOException {
         HashMap<String, String> urls = new HashMap<String, String>();
         urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.txt",
                 "intact.txt");
         urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact-clustered.txt",
                 "intact-clustered.txt");
+
         Set<String> urlset = urls.keySet();
         int cnt = 0;
         for (Iterator<String> it = urlset.iterator(); it.hasNext();) {
             String key = it.next();
             cnt = cnt + 1;
-            try {
-                App.downaloadFile(key, urls.get(key), false);
-            } catch (IOException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            }
+            App.downaloadFile(key, urls.get(key), force);
         }
         System.out.println();
+    }
+
+    /**
+     * Main function.
+     * This download and convert the protein-protein information into a semantic
+     * graph (RDF).
+     * @param debug Print out additionnal information.
+     */
+    public void main(boolean debug) {
 
         Model model = ModelFactory.createDefaultModel();
         try {
-            for (Iterator<String> it = urlset.iterator(); it.hasNext();) {
-                String key = it.next();
-                model = PPI.getModelFromGff(urls.get(key), model);
-            }
+            model = this.getModelFromGff("intact.txt", model);
+            model = this.getModelFromGff("intact-clustered.txt", model);
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
         }
 
         System.out.println("Model final: " + model.size());
@@ -82,7 +129,9 @@ public class PPI {
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "Error while writting: {0}", ex.getMessage());
-            ex.printStackTrace(System.err);
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
         }
     }
 
@@ -95,7 +144,7 @@ public class PPI {
      * @throws IOException when something goes wrong while trying to read the
      * file.
      */
-    public static Model getModelFromGff(final String inputfilename,
+    public Model getModelFromGff(final String inputfilename,
             Model model) throws IOException {
 
         System.out.println("Parsing: " + inputfilename
