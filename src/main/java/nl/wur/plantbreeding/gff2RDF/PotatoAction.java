@@ -20,7 +20,7 @@ import nl.wur.plantbreeding.gff2RDF.Potato.Po_ParseGeneDescription;
  * annotation from Potato to RDF.
  *
  * The main function are the download and main functions.
- * The first one just download the files into the 'Potato' directory from
+ * The first one just download the files into the 'Potato_files' directory from
  * the PGSC.
  * The second one reads them and export them into the Jena Model which is then
  * writen as RDF if not empty.
@@ -38,7 +38,7 @@ public class PotatoAction {
     /**
      * Default constructor.
      *
-     * Creates the folder 'Potato' if necessary.
+     * Creates the folder 'Potato_files' if necessary.
      */
     public PotatoAction() {
         App.makeFolder(this.folder);

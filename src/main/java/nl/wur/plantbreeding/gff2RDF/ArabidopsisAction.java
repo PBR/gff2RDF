@@ -25,7 +25,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * annotation from Arabidopsis to RDF.
  *
  * The main function are the download and main functions.
- * The first one just download the files into the 'At' directory from TAIR.
+ * The first one just download the files into the 'At_files' directory from TAIR.
  * The second one reads them and export them into the Jena Model which is then
  * writen as RDF if not empty.
  *
@@ -43,7 +43,7 @@ public class ArabidopsisAction {
     /**
      * Default constructor.
      *
-     * Creates the folder 'At' if necessary.
+     * Creates the folder 'At_files' if necessary.
      */
     public ArabidopsisAction() {
         App.makeFolder(this.folder);
