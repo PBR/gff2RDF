@@ -48,6 +48,9 @@ public class ClOptions {
     @Option(name = "--potato",
     usage = "Download the Potato genome annotation (v3.4 from PGSC) and convert it to RDF")
     private boolean potato;
+    @Option(name = "--ppi",
+    usage = "Download protein-protein information (from EBI) and convert it to RDF")
+    private boolean ppi;
     @Option(name = "-h", aliases = {"--help"},
     usage = "Print the usage and exit")
     private boolean help;
@@ -145,6 +148,14 @@ public class ClOptions {
      */
     public boolean isArabidopsis() {
         return this.arabidopsis;
+    }
+
+    /**
+     * Returns whether the protein-protein interaction argument was set.
+     * @return the boolean ppi.
+     */
+    public boolean isPpi() {
+        return this.ppi;
     }
 
     /**

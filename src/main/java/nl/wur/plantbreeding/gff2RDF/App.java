@@ -151,6 +151,14 @@ public class App {
                 }
             }
 
+            if (options.isPpi()) {
+                PPIAction ppia = new PPIAction();
+                ppia.download(options.isForceDl());
+                if (!options.isDlOnly()) {
+                    ppia.main(options.isDebug());
+                }
+            }
+
         } catch (CmdLineException e) {
             LOG.log(Level.SEVERE, "Error in the command line: {0}",
                     e.getMessage());
