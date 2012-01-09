@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
+import nl.wur.plantbreeding.gff2RDF.object.Gene;
 
 /**
  * This class parses the Arabidopsis thaliana GO annotation.
@@ -64,13 +65,13 @@ public class At_ParseGoGene {
         final DataInputStream in = new DataInputStream(fstream);
         final BufferedReader br =
                 new BufferedReader(new InputStreamReader(in));
-        At_Gene gene = null;
+        Gene gene = null;
         //Read File Line By Line
         while ((strline = br.readLine()) != null) {
             strline = strline.trim();
             String[] content = strline.split("\t");
             if (content.length > 1 && content[0].startsWith("AT")) {
-                gene = new At_Gene();
+                gene = new Gene();
                 gene.setLocus(content[0].trim());
                 gene.addGoTerm(content[5].trim());
 

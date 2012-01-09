@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
+import nl.wur.plantbreeding.gff2RDF.object.Gene;
 
 /**
  * This class parses the files submitted by TAIR to the NCBI in the release
@@ -29,7 +30,7 @@ import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
 public class At_ParseGeneInfo {
 
     /** Logger used for outputing log information. */
-    private final Logger log = Logger.getLogger(
+    private static final Logger LOG = Logger.getLogger(
             At_ParseGeneInfo.class.getName());
 
     /**
@@ -67,13 +68,13 @@ public class At_ParseGeneInfo {
         final DataInputStream in = new DataInputStream(fstream);
         final BufferedReader br =
                 new BufferedReader(new InputStreamReader(in));
-        At_Gene gene = null;
+        Gene gene = null;
         //Read File Line By Line
         while ((strline = br.readLine()) != null) {
             strline = strline.trim();
             String[] content = strline.split("\t");
             if (content.length > 3 && content[2].equalsIgnoreCase("gene")) {
-                gene = new At_Gene();
+                gene = new Gene();
                 gene.setChromosome(content[0].trim());
                 gene.addPosition(content[3], content[4]);
                 String locus = content[content.length - 1].split(
@@ -96,9 +97,9 @@ public class At_ParseGeneInfo {
             model = obj2m.addToModel(gene, model);
         }
 
-        log.log(Level.FINE, cnt + " lines read");
-        log.log(Level.FINE, genecnt + " genes found");
-        log.log(Level.FINE, "Model has size: " + model.size());
+        LOG.log(Level.FINE, cnt + " lines read");
+        LOG.log(Level.FINE, genecnt + " genes found");
+        LOG.log(Level.FINE, "Model has size: " + model.size());
 
         return model;
     }
