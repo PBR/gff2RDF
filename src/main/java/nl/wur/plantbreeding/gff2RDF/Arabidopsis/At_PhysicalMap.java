@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nl.wur.plantbreeding.gff2RDF.ObjectToModel;
+import nl.wur.plantbreeding.gff2RDF.object.Marker;
 
 /**
  * This class parses the Arabidopsis thaliana Physical Map
@@ -56,14 +57,15 @@ public class At_PhysicalMap {
         final DataInputStream in = new DataInputStream(fstream);
         final BufferedReader br =
                 new BufferedReader(new InputStreamReader(in));
-        At_Marker marker = null;
+        Marker marker = null;
         //Read File Line By Line
         while ((strline = br.readLine()) != null) {
             strline = strline.replace("\"", "");
             strline = strline.trim();
             String[] content = strline.split(",");
             if (content.length > 1 && cnt > 1) {
-                marker = new At_Marker(false);
+                marker = new Marker(false);
+                marker.setGenetic(false);
                 marker.setName(content[0].trim());
                 String chr = "Chr" + content[1].trim();
                 marker.setChromosome(chr);

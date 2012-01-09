@@ -40,6 +40,20 @@ public class Marker {
     protected boolean genetic;
 
     /**
+     * Default constructor
+     */
+    public Marker() { }
+
+    /**
+     * Constructor allowing to specify if the marker is genetic or physical.
+     * @param b a boolean specifying if the marker is genetic (true, default) or
+     * on a physical map (false).
+     */
+    public Marker(boolean b) {
+        this.genetic = b;
+    }
+
+    /**
      * Ask wether the marker is located on a genetic map (true) or on a physical
      * map (false).
      * @return a boolean
