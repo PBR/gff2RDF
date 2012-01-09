@@ -32,7 +32,7 @@ class TomatoAction {
     private static final Logger LOG = Logger.getLogger(
             PotatoAction.class.getName());
     /** Folder in which the files are/will be stored. */
-    private String folder = "Tomato/";
+    private String folder = "Tomato_files/";
 
     /**
      * Default constructor.
