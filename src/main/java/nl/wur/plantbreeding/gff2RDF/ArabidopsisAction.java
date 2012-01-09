@@ -38,7 +38,7 @@ public class ArabidopsisAction {
             ArabidopsisAction.class.getName());
 
     /** Folder in which the files are/will be stored. */
-    private String folder = "At/";
+    private String folder = "At_files/";
 
     /**
      * Default constructor.

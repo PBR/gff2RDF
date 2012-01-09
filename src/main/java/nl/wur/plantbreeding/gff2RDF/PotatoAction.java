@@ -33,7 +33,7 @@ public class PotatoAction {
     private static final Logger LOG = Logger.getLogger(
             PotatoAction.class.getName());
     /** Folder in which the files are/will be stored. */
-    private String folder = "Potato/";
+    private String folder = "Potato_files/";
 
     /**
      * Default constructor.
