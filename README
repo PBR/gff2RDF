@@ -17,7 +17,7 @@ Installation
 ============
 
 * Clone this repository:
-    git clone https://pypingou@github.com/PBR/gff2RDF.git
+    git clone https://github.com/PBR/gff2RDF.git
 * Compile the sources:
     cd gff2rdf
     mvn install
