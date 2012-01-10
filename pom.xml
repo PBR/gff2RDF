@@ -7,6 +7,13 @@
     <version>1.0</version>
     <name>gff2RDF</name>
     <url>https://github.com/PBR/gff2RDF</url>
+    <licenses>
+        <license>
+            <name>New BSD</name>
+            <url>https://fedoraproject.org/wiki/Licensing/BSD#3ClauseBSD</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <issueManagement>
         <system>github</system>
         <url>https://github.com/PBR/gff2RDF/issues</url>
@@ -30,6 +37,7 @@ available for tomato at: https://www.eu-sol.wur.nl/marker2seq
         <name>Wageningen UR Plant Breeding</name>
         <url>http://www.plantbreeding.wur.nl</url>
     </organization>
+    <inceptionYear>2012</inceptionYear>
     <build>
         <plugins>
             <plugin>
@@ -69,7 +77,17 @@ available for tomato at: https://www.eu-sol.wur.nl/marker2seq
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-doap-plugin</artifactId>
-                <version>1.0</version>
+                <version>1.1</version>
+                <configuration>
+                    <doapOptions>
+                        <created>${project.inceptionYear}-01-10</created>
+                        <shortdesc>Provides an easy way to convert the genome
+annotation of some crops into a semantic format
+                        </shortdesc>
+                        <vendor>${project.organization.name}</vendor>
+                        <license>${project.licenses[0].url}</license>
+                    </doapOptions>
+                </configuration>
             </plugin>
         </plugins>
     </build>
