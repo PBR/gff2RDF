@@ -105,10 +105,10 @@ class TomatoAction {
      */
     public void download(boolean force) throws IOException {
         HashMap<String, String> urls = new HashMap<String, String>();
-        urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2_release/ITAG2_genomic_all.gff3",
-                this.folder + "ITAG2_genomic_all.gff3");
-        urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2_release/ITAG2_protein_functional.gff3",
-                this.folder + "ITAG2_protein_functional.gff3");
+        urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2.3_release/ITAG2.3_gene_models.gff3",
+                this.folder + "ITAG2.3_gene_models.gff3");
+        urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2.3_release/ITAG2.3_protein_functional.gff3",
+                this.folder + "ITAG2.3_protein_functional.gff3");
 
         Set<String> urlset = urls.keySet();
         int cnt = 0;
@@ -132,7 +132,7 @@ class TomatoAction {
 
         try {
             // GFF file containing the gene information
-            inputfilename = this.folder + "ITAG2_genomic_all.gff3";
+            inputfilename = this.folder + "ITAG2.3_gene_models.gff3";
             To_ParseGeneInfo parser = new To_ParseGeneInfo();
             model = parser.addGenesToModel(inputfilename, model);
         } catch (IOException ex) {
@@ -146,7 +146,7 @@ class TomatoAction {
 
         try {
             // GFF file containing the protein information
-            inputfilename = this.folder + "ITAG2_protein_functional.gff3";
+            inputfilename = this.folder + "ITAG2.3_protein_functional.gff3";
             To_ParseGeneInfo parser = new To_ParseGeneInfo();
             model = parser.addProteinsToModel(inputfilename, model);
         } catch (IOException ex) {
