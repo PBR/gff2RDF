@@ -88,6 +88,9 @@ public class To_ParseGeneInfo {
             if (content.length < 2) {
                 continue;
             }
+            if (content[0].startsWith("#")) {
+                continue;
+            }
 
             if (content[1].equalsIgnoreCase("itag_sgn_markers")
                     && content[2].equalsIgnoreCase("match")) {
@@ -139,7 +142,7 @@ public class To_ParseGeneInfo {
                 }
                 gene.setLocus(name);
                 gene.setDescription(description);
-                gene.setType("gene:ITAG_renaming");
+                gene.setType("gene:ITAG_eugene");
 
                 final int start = Integer.parseInt(content[3]);
                 final int stop = Integer.parseInt(content[4]);
