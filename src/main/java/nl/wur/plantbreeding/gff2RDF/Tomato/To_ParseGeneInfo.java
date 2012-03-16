@@ -117,7 +117,7 @@ public class To_ParseGeneInfo {
 
                 model = obj2m.addToModel(marker, model);
 
-            } else if (content[1].equalsIgnoreCase("itag_renaming")
+            } else if (content[1].equalsIgnoreCase("itag_eugene")
                     && content[2].equalsIgnoreCase("mrna")) {
                 Gene gene = new Gene();
                 // Add gene information (description, GO...) to the model
