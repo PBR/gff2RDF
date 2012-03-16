@@ -109,6 +109,8 @@ class TomatoAction {
                 this.folder + "ITAG2.3_gene_models.gff3");
         urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2.3_release/ITAG2.3_protein_functional.gff3",
                 this.folder + "ITAG2.3_protein_functional.gff3");
+        urls.put("ftp://ftp.solgenomics.net/tomato_genome/annotation/ITAG2.3_release/ITAG2.3_sgn_data.gff3",
+                this.folder + "ITAG2.3_sgn_data.gff3");
 
         Set<String> urlset = urls.keySet();
         int cnt = 0;
@@ -133,6 +135,20 @@ class TomatoAction {
         try {
             // GFF file containing the gene information
             inputfilename = this.folder + "ITAG2.3_gene_models.gff3";
+            To_ParseGeneInfo parser = new To_ParseGeneInfo();
+            model = parser.addGenesToModel(inputfilename, model);
+        } catch (IOException ex) {
+            System.err.println();
+            LOG.log(Level.SEVERE, "IO Error in " + inputfilename
+                    + ": \"{0}\"", ex.getMessage());
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
+        }
+        
+        try {
+            // GFF file containing the SGN marker information
+            inputfilename = this.folder + "ITAG2.3_sgn_data.gff3";
             To_ParseGeneInfo parser = new To_ParseGeneInfo();
             model = parser.addGenesToModel(inputfilename, model);
         } catch (IOException ex) {
