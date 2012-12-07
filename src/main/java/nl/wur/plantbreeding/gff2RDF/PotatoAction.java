@@ -30,6 +30,9 @@
 
 package nl.wur.plantbreeding.gff2RDF;
 
+import nl.wur.plantbreeding.gff2RDF.Potato.Po_ParseProtein;
+import nl.wur.plantbreeding.gff2RDF.Potato.Po_ParseGo;
+import nl.wur.plantbreeding.gff2RDF.Potato.Po_ParseGeneToProtein;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import java.io.IOException;
@@ -106,10 +109,16 @@ public class PotatoAction {
      */
     public void download(boolean force) throws IOException {
         HashMap<String, String> urls = new HashMap<String, String>();
-        urls.put("http://potatogenomics.plantbiology.msu.edu/data/PGSC_DM_v3.4_gene_func.txt.zip",
+        urls.put("http://solanaceae.plantbiology.msu.edu/data/PGSC_DM_v3.4_gene_func.txt.zip",
                 this.folder + "PGSC_DM_v3.4_gene_func.txt.zip");
-        urls.put("http://potatogenomics.plantbiology.msu.edu/data/PGSC_DM_v3.4_gene.gff.zip",
+        urls.put("http://solanaceae.plantbiology.msu.edu/data/PGSC_DM_v3.4_gene.gff.zip",
                 this.folder + "PGSC_DM_v3.4_gene.gff.zip");
+       urls.put("http://solanaceae.plantbiology.msu.edu/data/PGSC_DM_v3.4_g2t2c2p2func.txt.zip",
+                this.folder + "PGSC_DM_v3.4_g2t2c2p2func.txt.zip");
+       urls.put("ftp://ftp.plantbiology.msu.edu/pub/data/SGR/GO_annotations/Solanum_phureja.txt.zip",
+                this.folder + "Solanum_phureja.txt.zip");
+       urls.put("ftp://test2",
+                this.folder + "PGSC_gene_UniRef.txt");
 
         Set<String> urlset = urls.keySet();
         int cnt = 0;
@@ -128,7 +137,8 @@ public class PotatoAction {
      */
     public void unzipFiles(boolean force) {
         String[] files = {"PGSC_DM_v3.4_gene.gff.zip",
-            "PGSC_DM_v3.4_gene_func.txt.zip"};
+            "PGSC_DM_v3.4_gene_func.txt.zip", "Solanum_phureja.txt.zip",
+            "PGSC_DM_v3.4_g2t2c2p2func.txt.zip"};
         for (String file : files) {
             try {
                 App.extractZipFile(this.folder + file, this.folder, force);
@@ -170,6 +180,39 @@ public class PotatoAction {
             inputfilename = this.folder + "PGSC_DM_v3.4_gene_func.txt";
             Po_ParseGeneDescription parser = new Po_ParseGeneDescription();
             model = parser.addGeneDescriptionToModel(inputfilename, model);
+        } catch (IOException ex) {
+            System.err.println();
+            LOG.log(Level.SEVERE, "IO Error in " + inputfilename
+                    + ": \"{0}\"", ex.getMessage());
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
+        }
+
+        try {
+            // GFF file containing the PGSC gene to PGSC peptide information
+            inputfilename = this.folder + "PGSC_DM_v3.4_g2t2c2p2func.txt";
+            Po_ParseGeneToProtein parser = new Po_ParseGeneToProtein();
+            HashMap<String, String> convertion_table = parser.parseGeneToProtein(
+                    inputfilename);
+            inputfilename = this.folder + "Solanum_phureja.txt";
+            Po_ParseGo goparser = new Po_ParseGo();
+            model = goparser.addGeneGoToModel(inputfilename, convertion_table,
+                    model);
+        } catch (IOException ex) {
+            System.err.println();
+            LOG.log(Level.SEVERE, "IO Error in " + inputfilename
+                    + ": \"{0}\"", ex.getMessage());
+            if (debug) {
+                ex.printStackTrace(System.err);
+            }
+        }
+
+        try {
+            // GFF file containing the PGSC gene to PGSC peptide information
+            inputfilename = this.folder + "PGSC_gene_UniRef.txt";
+            Po_ParseProtein parser = new Po_ParseProtein();
+            model = parser.addProteinToModel(inputfilename, model);
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "IO Error in " + inputfilename
