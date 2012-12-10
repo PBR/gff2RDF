@@ -100,8 +100,11 @@ public class ObjectToModel {
         gene.addProperty(RDF.type, geneuri);
         gene.addProperty(model.createProperty(geneuri + "FeatureName"),
                 geneobj.getLocus());
-        gene.addProperty(model.createProperty(geneuri + "Description"),
+        if (geneobj.getDescription() != null
+            && !geneobj.getDescription().isEmpty()) {
+            gene.addProperty(model.createProperty(geneuri + "Description"),
                 geneobj.getDescription());
+        }
         if (geneobj.getType() != null && !geneobj.getType().isEmpty()) {
             gene.addProperty(model.createProperty(geneuri + "FeatureType"),
                 geneobj.getType());
