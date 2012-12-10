@@ -99,6 +99,7 @@ public class Po_ParseGeneInfo {
                 String locus = content[content.length - 1].split(
                         "ID=")[1].split(";")[0];
                 gene.setLocus(locus);
+                gene.setType("mRNA:gene");
 
                 // Add gene to model
                 model = obj2m.addToModel(gene, model);
