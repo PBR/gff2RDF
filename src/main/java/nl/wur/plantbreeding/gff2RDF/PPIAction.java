@@ -113,7 +113,7 @@ public class PPIAction {
         HashMap<String, String> urls = new HashMap<String, String>();
         urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.txt",
                 "intact.txt");
-        urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact-clustered.txt",
+        urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact-miclustered.txt",
                 "intact-clustered.txt");
 
         Set<String> urlset = urls.keySet();
