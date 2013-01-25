@@ -64,7 +64,7 @@ public class PPIAction {
      * You may change it to fit your needs.
      */
     private String uri = "http://pbr.wur.nl/";
-    /** Logger used for outputing log information. */
+    /** Logger used for outputting log information. */
     private static final Logger LOG = Logger.getLogger(
             ObjectToModel.class.getName());
     /** Folder in which the files are/will be stored. */
@@ -112,9 +112,9 @@ public class PPIAction {
     public void download(boolean force) throws IOException {
         HashMap<String, String> urls = new HashMap<String, String>();
         urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.txt",
-                "intact.txt");
-        urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact-miclustered.txt",
-                "intact-clustered.txt");
+                this.folder + "intact.txt");
+        urls.put("ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact-micluster.txt",
+                this.folder + "intact-miclustered.txt");
 
         Set<String> urlset = urls.keySet();
         int cnt = 0;
@@ -136,8 +136,8 @@ public class PPIAction {
 
         Model model = ModelFactory.createDefaultModel();
         try {
-            model = this.getModelFromGff("intact.txt", model);
-            model = this.getModelFromGff("intact-clustered.txt", model);
+            model = this.getModelFromGff(this.folder + "intact.txt", model);
+            model = this.getModelFromGff(this.folder + "intact-miclustered.txt", model);
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             if (debug) {
@@ -149,7 +149,7 @@ public class PPIAction {
         try {
             if (!model.isEmpty()) {
                 ModelIO mio = new ModelIO();
-                String outputfilename = "ppimodel.rdf";
+                String outputfilename = this.folder + "ppimodel.rdf";
                 mio.printModelToFile(model, outputfilename);
             }
         } catch (IOException ex) {
@@ -191,6 +191,10 @@ public class PPIAction {
             strline = strline.trim();
             String[] content = strline.split("\t");
             if (cnt > 1) {
+                if (content[0].trim().equals("-")
+                        || content[1].trim().equals("-")) {
+                    continue;
+                }
                 String prot1 = content[0].split("\\|")[0].split(":")[1];
                 String prot2 = content[1].split("\\|")[0].split(":")[1];
                 // Add ppi to model
