@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Pierre-Yves Chibon
+ * Copyright (c) 2012-2013, Pierre-Yves Chibon
  *
  * All rights reserved.
  *
@@ -140,6 +140,7 @@ public class To_ParseGeneInfo {
                 gene.setLocus(name);
                 gene.setDescription(description);
                 gene.setType("gene:ITAG_renaming");
+                gene.setOrientation(content[6]);
 
                 final int start = Integer.parseInt(content[3]);
                 final int stop = Integer.parseInt(content[4]);
