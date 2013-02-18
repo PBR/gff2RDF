@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Pierre-Yves Chibon
+ * Copyright (c) 2012-2013, Pierre-Yves Chibon
  *
  * All rights reserved.
  *
@@ -108,6 +108,11 @@ public class ObjectToModel {
         if (geneobj.getType() != null && !geneobj.getType().isEmpty()) {
             gene.addProperty(model.createProperty(geneuri + "FeatureType"),
                 geneobj.getType());
+        }
+        
+        if (geneobj.getOrientation()!= null && !geneobj.getOrientation().isEmpty()) {
+            gene.addProperty(model.createProperty(geneuri + "Orientation"),
+                geneobj.getOrientation());
         }
 
         // Create the position node, add type and start, stop and chr
