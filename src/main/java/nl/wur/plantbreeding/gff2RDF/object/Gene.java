@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Pierre-Yves Chibon
+ * Copyright (c) 2012-2013, Pierre-Yves Chibon
  *
  * All rights reserved.
  *
@@ -56,6 +56,8 @@ public class Gene {
     private int stop;
     /** The Chromosome of the gene on the genome. */
     private String chromosome;
+    /** The orientation of the gene on the genome. */
+    private String orientation;
 
     /**
      * Return the type of the gene.
@@ -218,6 +220,24 @@ public class Gene {
         this.synonym = tmpsynonym;
     }
 
+    /**
+     * Retrieve the orientation of this gene.
+     * @return a String representating the orientation of this gene
+     * (should either + or -)
+     */
+    public String getOrientation() {
+        return orientation;
+    }
+
+    /**
+     * Set the orientation of this gene.
+     * @param orientation a String which gives the information about the
+     * orientation of this gene on the genome (should be either + or -).
+     */
+    public void setOrientation(String orientation) {
+        this.orientation = orientation;
+    }
+    
     /*
      * Non-basic functions
      */
