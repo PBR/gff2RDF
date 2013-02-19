@@ -102,7 +102,6 @@ public class To_ParseGeneInfo {
                         "Name=")[1].split(";")[0];
                 marker.setName(name);
                 
-
                 marker.setChromosome(content[0]);
 
                 final int start = Integer.parseInt(content[3]);

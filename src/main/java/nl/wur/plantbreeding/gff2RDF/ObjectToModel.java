@@ -215,8 +215,8 @@ public class ObjectToModel {
                 position.addProperty(RDF.type, positionuri);
                 position.addProperty(model.createProperty(positionuri
                         + "Start"), Integer.toString(marker.getStart()));
-                position.addProperty(model.createProperty(positionuri + "Stop"),
-                        Integer.toString(marker.getStop()));
+                position.addProperty(model.createProperty(positionuri
+                        + "Stop"), Integer.toString(marker.getStop()));
                 position.addProperty(model.createProperty(positionuri
                         + "Scaffold"), scaffold);
                 markerres.addProperty(model.createProperty(markeruri
