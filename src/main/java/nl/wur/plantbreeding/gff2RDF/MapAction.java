@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Pierre-Yves Chibon
+ * Copyright (c) 2012-2013, Pierre-Yves Chibon
  *
  * All rights reserved.
  *
@@ -88,14 +88,14 @@ class MapAction {
      *
      * @param debug boolean to print the stack trace of the exceptions catched.
      */
-    public void main(String inputfilename, boolean debug) {
+    public void main(String inputfilename, boolean physical,
+            boolean debug) {
         Model model = ModelFactory.createDefaultModel();
 
         try {
-            // GFF file containing the gene information
-            inputfilename = this.folder + "ITAG2_genomic_all.gff3";
+            // GFF file containing the gene information;
             Ma_ParserMapInfo parser = new Ma_ParserMapInfo();
-            model = parser.addMarkersToModel(inputfilename, model);
+            model = parser.addMarkersToModel(inputfilename, model, physical);
         } catch (IOException ex) {
             System.err.println();
             LOG.log(Level.SEVERE, "IO Error in " + inputfilename

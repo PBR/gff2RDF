@@ -52,7 +52,8 @@ public class Ma_ParserMapInfo {
     private static final Logger LOG = Logger.getLogger(
             Ma_ParserMapInfo.class.getName());
 
-    public Model addMarkersToModel(String inputfilename, Model model)
+    public Model addMarkersToModel(String inputfilename, Model model,
+            boolean physical)
         throws IOException {
         ObjectToModel obj2m = new ObjectToModel();
 
@@ -75,8 +76,14 @@ public class Ma_ParserMapInfo {
                 marker.setId(content[0].trim());
                 marker.setName(content[1].trim());
                 marker.setChromosome(content[2].trim());
-                marker.setPosition(content[3].trim());
-                marker.setGenetic(true);
+                if (!physical) {
+                    marker.setPosition(content[3].trim());
+                    marker.setGenetic(true);
+                } else {
+                    marker.setStart(Integer.parseInt(content[3].trim()));
+                    marker.setStop(Integer.parseInt(content[4].trim()));
+                    marker.setGenetic(false);
+                }
                 model = obj2m.addToModel(marker, model);
                 cnt = cnt + 1;
             }

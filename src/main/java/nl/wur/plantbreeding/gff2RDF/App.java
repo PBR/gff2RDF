@@ -147,7 +147,21 @@ public class App {
                     ma = new MapAction();
                 }
                 if (!options.isDlOnly()) {
-                    ma.main(options.getMap(), options.isDebug());
+                    ma.main(options.getMap(), false, options.isDebug());
+                }
+            }
+            
+            if (options.getPhysicalMap() != null
+                    && !options.getPhysicalMap().isEmpty()) {
+                MapAction ma;
+                if (options.getFolder() != null
+                        && !options.getFolder().isEmpty()) {
+                    ma = new MapAction(options.getFolder());
+                } else {
+                    ma = new MapAction();
+                }
+                if (!options.isDlOnly()) {
+                    ma.main(options.getPhysicalMap(), true, options.isDebug());
                 }
             }
 

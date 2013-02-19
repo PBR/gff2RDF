@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Pierre-Yves Chibon
+ * Copyright (c) 2012-2013, Pierre-Yves Chibon
  *
  * All rights reserved.
  *
@@ -73,8 +73,15 @@ public class ClOptions {
 
     @Option(name = "--map",
     usage = "Specifies a genetic map to add to the model. "
-            + "The file should be present in the file system, tab delimited and have four columns: ID (used in the URI), name, chromosome, map position")
+            + "The file should be present in the file system, tab delimited and have four columns:"
+            + " ID (used in the URI), name, chromosome, map position")
     private String map;
+    
+    @Option(name = "--physical-map",
+    usage = "Specifies a physical map to add to the model. "
+            + "The file should be present in the file system, tab delimited and have four columns:"
+            + " ID (used in the URI), name, chromosome, physical position")
+    private String physical_map;
 
     /**
      * Returns whether the help argument was set.
@@ -166,5 +173,12 @@ public class ClOptions {
         return map;
     }
 
+    /**
+     * Returns the physical map set in the command line.
+     * @return a String of the path to the map file.
+     */
+    public String getPhysicalMap() {
+        return physical_map;
+    }
 
 }
